@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="view_status_report_form_view" model="ir.ui.view">
+        <field name="name">view_status_report_form</field>
+        <field name="model">project.status.report</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_confirm"
+                    string="Ready"
+                    type="object"
+                    states="draft" />
+                    <button name="action_validate"
+                    string="Publish"
+                    type="object"
+                    states="ready" />
+                    <field name="state" widget="statusbar" statusbar_visible="draft,ready,published"/>
+                </header>
+                <sheet>
+                    <h1>
+                        <field name="name"/>
+                    </h1>
+                    <group>
+                        <field name="project_id"/>
+                        <field name="date"/>
+                    </group>
+                    <group colspan="4" string="Cost" col="12" name="cost">
+                        <group colspan="4">
+                            <field name="cost_status" string="Status"/>
+                            <field name="cost_color" widget="color"/>
+                        </group>
+                        <group colspan="8">
+                            <field name="cost_remarks" string="Remarks"/>
+                        </group>
+                    </group>
+                    <group colspan="4" string="Quality" col="12" name="quality">
+                        <group colspan="4">
+                            <field name="quality_status" string="Status"/>
+                            <field name="quality_color" widget="color"/>
+                        </group>
+                        <group colspan="8">
+                            <field name="quality_remarks" string="Remarks"/>
+                        </group>
+                    </group>
+                    <group colspan="4" string="Delay" col="12" name="delay">
+                        <group colspan="4">
+                            <field name="delay_status" string="Status"/>
+                            <field name="delay_color" widget="color"/>
+                        </group>
+                        <group colspan="8">
+                            <field name="delay_remarks" string="Remarks"/>
+                        </group>
+                    </group>
+                    <group colspan="4" string="Global" col="12" name="global">
+                        <group colspan="4">
+                            <field name="global_status" string="Status"/>
+                            <field name="global_color" widget="color"/>
+                        </group>
+                        <group colspan="8">
+                            <field name="global_remarks" string="Remarks"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <label for="risks"/>
+                        <field name="risks" nolabel="1"/>
+
+                        <label for="indicator_ids"/>
+                        <field name="indicator_ids" nolabel="1">
+                            <tree>
+                                <field name="name"/>
+                                <field name="display_value"/>
+                                <field name="color" widget="color"/>
+                            </tree>
+                        </field>
+
+                        <label for="task_snapshot_ids"/>
+                        <field name="task_snapshot_ids" nolabel="1">
+                            <tree>
+                                <field name="task_id"/>
+                                <field name="user_id"/>
+                                <field name="planned_hours"/>
+                                <field name="progress" widget="progressbar"/>
+                                <field name="kanban_state"/>
+                                <field name="stage_id"/>
+                            </tree>
+                        </field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_status_report_tree_view" model="ir.ui.view">
+        <field name="name">view_status_report_tree</field>
+        <field name="model">project.status.report</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="project_id"/>
+                <field name="date"/>
+                <field name="cost_color" widget="color"/>
+                <field name="quality_color" widget="color"/>
+                <field name="delay_color" widget="color"/>
+                <field name="global_color" widget="color"/>
+                <field name="state" widget="color"/>
+                <field name="user_id" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_status_report_search_form" model="ir.ui.view">
+        <field name="name">view_status_report_form</field>
+        <field name="model">project.status.report</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="project_id"/>
+                <field name="date"/>
+                <field name="name"/>
+                <field name="user_id"/>
+                <filter string="Draft"
+                        name="state_draft"
+                        domain="[('state', '=', 'draft')]"/>
+                <filter string="Ready"
+                        name="state_ready"
+                        domain="[('state', '=', 'ready')]"/>
+                <filter string="Published"
+                        name="state_published"
+                        domain="[('state', '=', 'published')]"/>
+                <group expand="0" string="Group by...">
+                    <filter string="Project" domain="[]" context="{'group_by':'project_id'}"/>
+                    <filter string="State" domain="[]" context="{'group_by':'state'}"/>
+                    <filter string="User" domain="[]" context="{'group_by':'user_id'}"/>
+                    <filter string="Date" domain="[]" context="{'group_by':'date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="act_project_status_from_project" model="ir.actions.act_window">
+        <field name="name">Reports</field>
+        <field name="res_model">project.status.report</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{
+            'search_default_project_id': [active_id],
+            'default_project_id': active_id,
+        }</field>
+        <field name="search_view_id" ref="view_status_report_search_form"/>
+    </record>
+
+    <record id="act_project_status_all" model="ir.actions.act_window">
+        <field name="name">Status Reports</field>
+        <field name="res_model">project.status.report</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_status_report_search_form"/>
+    </record>
+
+    <menuitem
+            id="menu_project_status_report"
+            parent="project.menu_project_report"
+            sequence="100"
+            action="act_project_status_all"
+    />
+
+</odoo>
