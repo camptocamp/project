@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <record model="ir.cron" id="cron_generate_project_status_report">
+        <field name="name">Generate projects status reports</field>
+        <field name="interval_number" eval="1"/>
+        <field name="active" eval="False" /> <!-- To activate later -->
+        <field name="interval_type">months</field>
+        <field name="model">project.project</field>
+        <field name="function">action_generate_report_cron</field>
+        <field name="args"></field>
+        <field name="numbercall">-1</field>
+    </record>
+
+</odoo>

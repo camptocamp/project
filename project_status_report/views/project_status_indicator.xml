@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="view_status_indicators_form_view" model="ir.ui.view">
+        <field name="name">view_status_indicators_form</field>
+        <field name="model">project.status.indicator</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <h1>
+                        <field name="name"/>
+                    </h1>
+                    <group>
+                        <field name="active"/>
+                        <field name="sequence"/>
+                        <field name="value_type"/>
+                        <label for="python_code"/>
+                        <field name="python_code" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_status_indicator_tree_view" model="ir.ui.view">
+        <field name="name">view_status_indicator_tree</field>
+        <field name="model">project.status.indicator</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="sequence" widget="handle"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_status_indicator_search_form" model="ir.ui.view">
+        <field name="name">view_status_indicator_form</field>
+        <field name="model">project.status.indicator</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+            </search>
+        </field>
+    </record>
+
+
+    <record id="act_project_indicator_all" model="ir.actions.act_window">
+        <field name="name">Status indicator</field>
+        <field name="res_model">project.status.indicator</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_status_indicator_search_form"/>
+    </record>
+
+    <menuitem
+            id="menu_project_status_indicator"
+            parent="project.menu_project_config"
+            sequence="100"
+            action="act_project_indicator_all"
+    />
+
+
+    <record id="view_status_indicator_value_tree_view" model="ir.ui.view">
+        <field name="name">view_status_indicator_value_tree</field>
+        <field name="model">project.status.indicator.value</field>
+        <field name="arch" type="xml">
+            <tree create="false" edit="false" delete="false">
+                <field name="indicator_id"/>
+                <field name="project_id"/>
+                <field name="report_id"/>
+                <field name="date"/>
+                <field name="value_type"/>
+                <field name="value_numeric"/>
+                <field name="value_boolean"/>
+                <field name="value_text"/>
+                <field name="display_value"/>
+                <field name="color"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_status_indicator_value_search" model="ir.ui.view">
+        <field name="name">view_status_indicator_value_search</field>
+        <field name="model">project.status.indicator.value</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="project_id"/>
+                <field name="date"/>
+                <field name="indicator_id"/>
+                <filter string="Value type : Numeric"
+                        name="value_type"
+                        domain="[('value_type', '=', 'numeric')]"/>
+                <filter string="Value type : Text"
+                        name="value_type"
+                        domain="[('value_type', '=', 'text')]"/>
+                <filter string="Value type : Boolean"
+                        name="value_type"
+                        domain="[('value_type', '=', 'boolean')]"/>
+
+                <group expand="0" string="Group by...">
+                    <filter string="Project" domain="[]" context="{'group_by':'project_id'}"/>
+                    <filter string="Status report" domain="[]" context="{'group_by':'report_id'}"/>
+                    <filter string="Value type" domain="[]" context="{'group_by':'value_type'}"/>
+                    <filter string="Indicator" domain="[]" context="{'group_by':'indicator_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_status_indicator_value_pivot" model="ir.ui.view">
+            <field name="name">view_status_indicator_value_pivot</field>
+            <field name="model">project.status.indicator.value</field>
+            <field name="arch" type="xml">
+                <pivot>
+                    <field name="project_id" type="row"/>
+                    <field name="date" interval="month" type="col"/>
+                    <field name="indicator_id" type="col"/>
+                </pivot>
+            </field>
+        </record>
+
+    <record id="act_project_indicator_value_all" model="ir.actions.act_window">
+        <field name="name">Status Reports Indicator values</field>
+        <field name="res_model">project.status.indicator.value</field>
+        <field name="view_mode">tree,pivot</field>
+        <field name="search_view_id" ref="view_status_indicator_value_search"/>
+    </record>
+
+    <menuitem
+            id="menu_project_status_indicator_value"
+            parent="project.menu_project_report"
+            sequence="110"
+            action="act_project_indicator_value_all"
+    />
+
+</odoo>
