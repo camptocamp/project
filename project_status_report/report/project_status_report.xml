@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <template id="project_status_report" name="project_status_report">
+
+        <t t-call="report.html_container">
+
+            <t t-foreach="docs" t-as="o">
+                <div class="page">
+
+                    <table width="100%">
+                        <tr>
+                            <td width="50%"><h4 style="border-style:solid;border-width:1px;"><b><center><span t-field="o.name"/></center></b></h4></td>
+                            <td width="40"/>
+                            <td width="10%" style="text-align: right;"><h4 style="border-style:solid;border-width:1px;"><center><span t-field="o.state"/></center></h4></td>
+                        </tr>
+                    </table>
+
+
+                    <h3 style="border-style:solid;border-width:1px;background-color:lightgrey;padding:5px;">Project evaluation sheet</h3>
+
+                    <br/>
+
+                    <table width="100%" style="border-collapse:separate;border-spacing:10px;">
+                        <t t-foreach="o.get_evaluation_indicators_for_report()" t-as="evaluation_indicator">
+                            <tr>
+                                <td width="10%" style="vertical-align:top;"><strong><span t-esc="evaluation_indicator[0]"/></strong></td>
+                                <td width="10%">
+                                    <span t-att-style="'background-color:' + evaluation_indicator[1] + ';display: block;width: 50px;height: 50px;cursor: pointer;'"/>
+                                </td>
+                                <td width="80%" style="border-style:solid;border-width:1px;padding: 7px;vertical-align:middle;"><t t-raw="evaluation_indicator[2]"/></td>
+                            </tr>
+                        </t>
+                    </table>
+
+                    <br/>
+
+                    <table width="100%" style="border-collapse:separate;border-spacing:10px;">
+                        <tr>
+                            <td>Risks</td>
+                        </tr>
+                        <tr>
+                            <td style="border-style:solid;border-width:1px;vertical-align:middle;padding: 7px;"><t t-raw="o.risks"/></td>
+                        </tr>
+                    </table>
+
+                    <br/>
+
+                    <h3 style="border-style:solid;border-width:1px;background-color:lightgrey;padding:5px;">Project indicators</h3>
+
+                    <br/>
+
+                    <!--
+                        Here we want to display project indicators on 2 columns.
+
+                        By example, if project indicators are a, b, c, d, e, we will display
+                        a  b
+                        c  d
+                        e
+                    -->
+
+                    <table width="100%" style="border-collapse:separate;border-spacing:10px;">
+                        <t t-foreach="o.indicator_ids" t-as="project_indicator">
+                            <t t-if="project_indicator_even">
+                                &lt;tr&gt;
+                            </t>
+                            <td width="35%"><span t-esc="project_indicator.name"/></td>
+                            <td width="10%" t-att-style="'border-color:' + project_indicator.color + ';border-style:solid;border-width:2px;text-align: center;'">
+                                <span t-esc="project_indicator.display_value"/>
+                            </td>
+                            <t t-if="project_indicator_even">
+                                <!-- Space between columns -->
+                                <td width="10%"/>
+                                <t t-if="project_indicator_last">
+                                    <!-- Empty columns (if the last project indicator is at left) -->
+                                    <td width="35%"/>
+                                    <td width="10%"/>
+                                </t>
+                            </t>
+                            <t t-if="project_indicator_odd">
+                                &lt;/tr&gt;
+                            </t>
+                        </t>
+                    </table>
+
+                </div>
+            </t>
+
+        </t>
+    </template>
+
+    <report
+            id="report_project_status_report"
+            model="project.status.report"
+            string="Project status report"
+            report_type="qweb-pdf"
+            name="project_status_report.project_status_report"
+            file="project_status_report.project_status_report"
+            paperformat="report.paperformat_euro"/>
+
+</odoo>

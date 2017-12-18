@@ -1,0 +1,596 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* project_status_report
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 10.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-26 10:20+0000\n"
+"PO-Revision-Date: 2017-11-26 10:20+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: project_status_report
+#: model:ir.ui.view,arch_db:project_status_report.project_status_report
+msgid "&lt;/tr&gt;"
+msgstr "&lt;/tr&gt;"
+
+#. module: project_status_report
+#: model:ir.ui.view,arch_db:project_status_report.project_status_report
+msgid "&lt;tr&gt;"
+msgstr "&lt;tr&gt;"
+
+#. module: project_status_report
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_indicator_active
+msgid "Active"
+msgstr "Actif"
+
+#. module: project_status_report
+#: selection:project.task.snapshot,kanban_state:0
+msgid "Blocked"
+msgstr "Bloqué"
+
+#. module: project_status_report
+#: code:addons/odoo/external-src/project/project_status_report/models/project_status_indicator.py:32
+#: code:addons/project_status_report/models/project_status_indicator.py:32
+#: selection:project.status.indicator,value_type:0
+#, python-format
+msgid "Boolean"
+msgstr "Booléen"
+
+#. module: project_status_report
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_indicator_value_color
+msgid "Color"
+msgstr "Couleur"
+
+#. module: project_status_report
+#: code:addons/odoo/external-src/project/project_status_report/models/project_status.py:224
+#: code:addons/project_status_report/models/project_status.py:224
+#: model:ir.ui.view,arch_db:project_status_report.view_status_report_form_view
+#: model:ir.ui.view,arch_db:project_status_report.view_status_report_tree_view
+#, python-format
+msgid "Cost"
+msgstr "Coût"
+
+#. module: project_status_report
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_report_cost_color
+msgid "Cost color"
+msgstr "Couleur du coût"
+
+#. module: project_status_report
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_report_cost_remarks
+msgid "Cost remarks"
+msgstr "Remarques de coût"
+
+#. module: project_status_report
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_report_cost_status
+msgid "Cost status"
+msgstr "Statut du coût"
+
+#. module: project_status_report
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_indicator_create_uid
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_indicator_value_create_uid
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_report_create_uid
+#: model:ir.model.fields,field_description:project_status_report.field_project_task_snapshot_create_uid
+msgid "Created by"
+msgstr "Créé par"
+
+#. module: project_status_report
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_indicator_create_date
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_indicator_value_create_date
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_report_create_date
+#: model:ir.model.fields,field_description:project_status_report.field_project_task_snapshot_create_date
+msgid "Created on"
+msgstr "Créé le"
+
+#. module: project_status_report
+#: code:addons/odoo/external-src/project/project_status_report/models/project_status_indicator.py:34
+#: code:addons/project_status_report/models/project_status_indicator.py:34
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_indicator_value_date
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_report_date
+#: model:ir.ui.view,arch_db:project_status_report.view_status_report_search_form
+#: selection:project.status.indicator,value_type:0
+#, python-format
+msgid "Date"
+msgstr "Date"
+
+#. module: project_status_report
+#: model:ir.model.fields,field_description:project_status_report.field_project_task_snapshot_date_deadline
+msgid "Date deadline"
+msgstr "Date de la deadline"
+
+#. module: project_status_report
+#: code:addons/odoo/external-src/project/project_status_report/models/project_status.py:226
+#: code:addons/project_status_report/models/project_status.py:226
+#: model:ir.ui.view,arch_db:project_status_report.view_status_report_form_view
+#, python-format
+msgid "Delay"
+msgstr "Délai"
+
+#. module: project_status_report
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_report_delay_color
+msgid "Delay color"
+msgstr "Couleur du délai"
+
+#. module: project_status_report
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_report_delay_remarks
+msgid "Delay remarks"
+msgstr "Remarques du délai"
+
+#. module: project_status_report
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_report_delay_status
+msgid "Delay status"
+msgstr "Statut du délai"
+
+#. module: project_status_report
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_indicator_display_name
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_indicator_value_display_name
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_report_display_name
+#: model:ir.model.fields,field_description:project_status_report.field_project_task_snapshot_display_name
+msgid "Display Name"
+msgstr "Nom d’affichage"
+
+#. module: project_status_report
+#: model:ir.ui.view,arch_db:project_status_report.view_status_report_search_form
+#: selection:project.status.report,state:0
+msgid "Draft"
+msgstr "Brouillon"
+
+#. module: project_status_report
+#: model:ir.ui.view,arch_db:project_status_report.view_status_report_tree_view
+msgid "Délai"
+msgstr "Délai"
+
+#. module: project_status_report
+#: code:addons/odoo/external-src/project/project_status_report/models/project_status_indicator.py:59
+#: code:addons/project_status_report/models/project_status_indicator.py:59
+#, python-format
+msgid "Error in python code for step \"%s\" at line %d, offset %d:\n"
+"%s"
+msgstr "Erreur dans le code python à l'étape \"%s\" à la ligne %d, position %d:\n"
+"%s"
+
+#. module: project_status_report
+#: model:ir.ui.view,arch_db:project_status_report.view_status_report_form_view
+msgid "Evaluation"
+msgstr "Évaluation"
+
+#. module: project_status_report
+#: model:ir.ui.view,arch_db:project_status_report.project_add_report_status_form
+msgid "Generate status report"
+msgstr "Générer le status report"
+
+#. module: project_status_report
+#: code:addons/odoo/external-src/project/project_status_report/models/project_status.py:227
+#: code:addons/project_status_report/models/project_status.py:227
+#: model:ir.ui.view,arch_db:project_status_report.view_status_report_form_view
+#: model:ir.ui.view,arch_db:project_status_report.view_status_report_tree_view
+#, python-format
+msgid "Global"
+msgstr "Global"
+
+#. module: project_status_report
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_report_global_color
+msgid "Global color"
+msgstr "Couleur du global"
+
+#. module: project_status_report
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_report_global_remarks
+msgid "Global remarks"
+msgstr "Remarques du global"
+
+#. module: project_status_report
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_report_global_status
+msgid "Global status"
+msgstr "Statut du global"
+
+#. module: project_status_report
+#: model:ir.ui.view,arch_db:project_status_report.view_status_indicator_value_search
+#: model:ir.ui.view,arch_db:project_status_report.view_status_report_search_form
+msgid "Group by..."
+msgstr "Regrouper par..."
+
+#. module: project_status_report
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_indicator_id
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_indicator_value_id
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_report_id
+#: model:ir.model.fields,field_description:project_status_report.field_project_task_snapshot_id
+msgid "ID"
+msgstr "ID du cas"
+
+#. module: project_status_report
+#: selection:project.task.snapshot,kanban_state:0
+msgid "In Progress"
+msgstr "En cours"
+
+#. module: project_status_report
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_indicator_value_indicator_id
+#: model:ir.ui.view,arch_db:project_status_report.view_status_indicator_value_search
+msgid "Indicator"
+msgstr "Indicateur"
+
+#. module: project_status_report
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_report_indicator_ids
+#: model:ir.ui.view,arch_db:project_status_report.view_status_report_form_view
+msgid "Indicators"
+msgstr "Indicateurs"
+
+#. module: project_status_report
+#: model:project.status.indicator,name:project_status_report.indicator_invoiced_amount
+msgid "Invoiced amount"
+msgstr "Montant facturé"
+
+#. module: project_status_report
+#: model:ir.model.fields,field_description:project_status_report.field_project_task_snapshot_kanban_state
+msgid "Kanban State"
+msgstr "État kanban"
+
+#. module: project_status_report
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_indicator___last_update
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_indicator_value___last_update
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_report___last_update
+#: model:ir.model.fields,field_description:project_status_report.field_project_task_snapshot___last_update
+msgid "Last Modified on"
+msgstr "Dernière modification le"
+
+#. module: project_status_report
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_indicator_value_write_uid
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_indicator_write_uid
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_report_write_uid
+#: model:ir.model.fields,field_description:project_status_report.field_project_task_snapshot_write_uid
+msgid "Last Updated by"
+msgstr "Dernière modification par"
+
+#. module: project_status_report
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_indicator_value_write_date
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_indicator_write_date
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_report_write_date
+#: model:ir.model.fields,field_description:project_status_report.field_project_task_snapshot_write_date
+msgid "Last Updated on"
+msgstr "Dernière mise à jour le"
+
+#. module: project_status_report
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_indicator_name
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_indicator_value_name
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_report_name
+msgid "Name"
+msgstr "Nom du segment"
+
+#. module: project_status_report
+#: code:addons/odoo/external-src/project/project_status_report/models/project_status_indicator.py:31
+#: code:addons/project_status_report/models/project_status_indicator.py:31
+#: selection:project.status.indicator,value_type:0
+#, python-format
+msgid "Numeric"
+msgstr "Numerique"
+
+#. module: project_status_report
+#: selection:project.status.report,cost_status:0
+#: selection:project.status.report,delay_status:0
+#: selection:project.status.report,global_status:0
+#: selection:project.status.report,quality_status:0
+msgid "OK"
+msgstr "OK"
+
+#. module: project_status_report
+#: model:ir.model.fields,field_description:project_status_report.field_project_task_snapshot_planned_hours
+msgid "Planned hours"
+msgstr "Heures planifiées"
+
+#. module: project_status_report
+#: model:ir.model.fields,field_description:project_status_report.field_project_task_snapshot_progress
+msgid "Progress"
+msgstr "Avancement"
+
+#. module: project_status_report
+#: model:ir.model,name:project_status_report.model_project_project
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_indicator_value_project_id
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_report_project_id
+#: model:ir.model.fields,field_description:project_status_report.field_project_task_snapshot_project_id
+#: model:ir.ui.view,arch_db:project_status_report.view_status_indicator_value_search
+#: model:ir.ui.view,arch_db:project_status_report.view_status_report_search_form
+msgid "Project"
+msgstr "Projet"
+
+#. module: project_status_report
+#: model:ir.ui.view,arch_db:project_status_report.project_status_report
+msgid "Project evaluation sheet"
+msgstr "Feuille d'évaluation du projet"
+
+#. module: project_status_report
+#: model:ir.ui.view,arch_db:project_status_report.project_status_report
+msgid "Project indicators"
+msgstr "Indicateurs projet"
+
+#. module: project_status_report
+#: model:ir.actions.report.xml,name:project_status_report.report_project_status_report
+msgid "Project status report"
+msgstr "Status report du projet"
+
+#. module: project_status_report
+#: model:ir.ui.view,arch_db:project_status_report.view_status_report_form_view
+msgid "Publish"
+msgstr "Publier"
+
+#. module: project_status_report
+#: model:ir.ui.view,arch_db:project_status_report.view_status_report_search_form
+#: selection:project.status.report,state:0
+msgid "Published"
+msgstr "Publié"
+
+#. module: project_status_report
+#: model:ir.ui.view,arch_db:project_status_report.view_status_report_form_view
+msgid "Put in draft"
+msgstr "Mettre en brouillon"
+
+#. module: project_status_report
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_indicator_python_code
+msgid "Python code"
+msgstr "Code Python"
+
+#. module: project_status_report
+#: code:addons/odoo/external-src/project/project_status_report/models/project_status.py:225
+#: code:addons/project_status_report/models/project_status.py:225
+#: model:ir.ui.view,arch_db:project_status_report.view_status_report_form_view
+#, python-format
+msgid "Quality"
+msgstr "Qualité"
+
+#. module: project_status_report
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_report_quality_color
+msgid "Quality color"
+msgstr "Couleur de la qualité"
+
+#. module: project_status_report
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_report_quality_remarks
+msgid "Quality remarks"
+msgstr "Remarques de la qualité"
+
+#. module: project_status_report
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_report_quality_status
+msgid "Quality status"
+msgstr "Statut de la qualité"
+
+#. module: project_status_report
+#: model:ir.ui.view,arch_db:project_status_report.view_status_report_tree_view
+msgid "Qualité"
+msgstr "Qualité"
+
+#. module: project_status_report
+#: model:ir.ui.view,arch_db:project_status_report.view_status_report_form_view
+#: model:ir.ui.view,arch_db:project_status_report.view_status_report_search_form
+#: selection:project.status.report,state:0
+msgid "Ready"
+msgstr "Prêt"
+
+#. module: project_status_report
+#: selection:project.task.snapshot,kanban_state:0
+msgid "Ready for next stage"
+msgstr "Prêt pour l'étage suivante"
+
+#. module: project_status_report
+#: model:project.status.indicator,name:project_status_report.indicator_remaining_planned_hours
+msgid "Remaining planned hours"
+msgstr "Heures planifiées restantes"
+
+#. module: project_status_report
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_indicator_value_report_id
+#: model:ir.model.fields,field_description:project_status_report.field_project_task_snapshot_report_id
+msgid "Report"
+msgstr "Lettre"
+
+#. module: project_status_report
+#: model:ir.model.fields,field_description:project_status_report.field_project_project_report_count
+msgid "Report count"
+msgstr "Compteur rapport"
+
+#. module: project_status_report
+#: model:ir.actions.act_window,name:project_status_report.act_project_status_from_project
+#: model:ir.model.fields,field_description:project_status_report.field_project_project_report_ids
+#: model:ir.ui.view,arch_db:project_status_report.project_add_report_status_form
+msgid "Reports"
+msgstr "Rapports"
+
+#. module: project_status_report
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_report_risks
+#: model:ir.ui.view,arch_db:project_status_report.project_status_report
+#: model:ir.ui.view,arch_db:project_status_report.view_status_report_form_view
+msgid "Risks"
+msgstr "Risques"
+
+#. module: project_status_report
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_indicator_sequence
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_indicator_value_sequence
+msgid "Sequence"
+msgstr "Sequence"
+
+#. module: project_status_report
+#: model:ir.model.fields,field_description:project_status_report.field_project_task_snapshot_stage_id
+msgid "Stage"
+msgstr "Etat"
+
+#. module: project_status_report
+#: model:ir.ui.view,arch_db:project_status_report.view_status_report_search_form
+msgid "State"
+msgstr "État"
+
+#. module: project_status_report
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_report_state
+#: model:ir.ui.view,arch_db:project_status_report.view_status_report_form_view
+msgid "Status"
+msgstr "État"
+
+#. module: project_status_report
+#: model:ir.actions.act_window,name:project_status_report.act_project_status_all
+#: model:ir.ui.menu,name:project_status_report.menu_project_status_report
+msgid "Status Reports"
+msgstr "Status Reports"
+
+#. module: project_status_report
+#: model:ir.actions.act_window,name:project_status_report.act_project_indicator_value_all
+#: model:ir.ui.menu,name:project_status_report.menu_project_status_indicator_value
+msgid "Status Reports Indicator values"
+msgstr "Valeur d'indicateurs de Status Reports"
+
+#. module: project_status_report
+#: model:ir.actions.act_window,name:project_status_report.act_project_indicator_all
+#: model:ir.ui.menu,name:project_status_report.menu_project_status_indicator
+msgid "Status indicator"
+msgstr "Indicateur de statut"
+
+#. module: project_status_report
+#: model:ir.ui.view,arch_db:project_status_report.view_status_indicator_value_search
+msgid "Status report"
+msgstr "Status report"
+
+#. module: project_status_report
+#: model:ir.model.fields,field_description:project_status_report.field_project_task_snapshot_task_id
+msgid "Task"
+msgstr "Tâche"
+
+#. module: project_status_report
+#: model:ir.model.fields,field_description:project_status_report.field_project_task_snapshot_name
+msgid "Task Title"
+msgstr "Titre de la tâche"
+
+#. module: project_status_report
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_report_task_snapshot_ids
+msgid "Task snapshots"
+msgstr "Task snapshots"
+
+#. module: project_status_report
+#: code:addons/odoo/external-src/project/project_status_report/models/project_status_indicator.py:33
+#: code:addons/project_status_report/models/project_status_indicator.py:33
+#: selection:project.status.indicator,value_type:0
+#, python-format
+msgid "Text"
+msgstr "Texte"
+
+#. module: project_status_report
+#: selection:project.status.report,cost_status:0
+#: selection:project.status.report,delay_status:0
+#: selection:project.status.report,global_status:0
+#: selection:project.status.report,quality_status:0
+msgid "To monitor"
+msgstr "A surveiller"
+
+#. module: project_status_report
+#: model:project.status.indicator,name:project_status_report.indicator_total_sale_amount
+msgid "Total sale amount"
+msgstr "Total montant vente"
+
+#. module: project_status_report
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_report_user_id
+#: model:ir.model.fields,field_description:project_status_report.field_project_task_snapshot_user_id
+#: model:ir.ui.view,arch_db:project_status_report.view_status_report_search_form
+msgid "User"
+msgstr "Utilisateur"
+
+#. module: project_status_report
+#: code:addons/odoo/external-src/project/project_status_report/models/project_status_indicator.py:183
+#: code:addons/project_status_report/models/project_status_indicator.py:183
+#, python-format
+msgid "User %s (id %s) is not allowed to create an indicator value"
+msgstr "L'utilisateur %s (id %s) n'est pas autorisé à créer une valeur d'indicateur"
+
+#. module: project_status_report
+#: code:addons/odoo/external-src/project/project_status_report/models/project_task_snapshot.py:60
+#: code:addons/project_status_report/models/project_task_snapshot.py:60
+#, python-format
+msgid "User %s (id %s) is not allowed to create an task snapshot"
+msgstr "L'utilisateur %s (id %s) n'est pas autorisé à créer un snapshot d'une tâche"
+
+#. module: project_status_report
+#: code:addons/odoo/external-src/project/project_status_report/models/project_status_indicator.py:200
+#: code:addons/project_status_report/models/project_status_indicator.py:200
+#, python-format
+msgid "User %s (id %s) is not allowed to write an indicator value"
+msgstr "L'utilisateur %s (id %s) n'est pas autorisé à modifier une valeur d'indicateur"
+
+#. module: project_status_report
+#: code:addons/odoo/external-src/project/project_status_report/models/project_task_snapshot.py:79
+#: code:addons/project_status_report/models/project_task_snapshot.py:79
+#, python-format
+msgid "User %s (id %s) is not allowed to write an task snapshot"
+msgstr "L'utilisateur %s (id %s) n'est pas autorisé à modifier un snapshot d'une tâche"
+
+#. module: project_status_report
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_indicator_value_display_value
+msgid "Value"
+msgstr "Type"
+
+#. module: project_status_report
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_indicator_value_value_boolean
+msgid "Value boolean"
+msgstr "Valeur booléenne"
+
+#. module: project_status_report
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_indicator_value_value_date
+msgid "Value date"
+msgstr "Value date"
+
+#. module: project_status_report
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_indicator_value_value_numeric
+msgid "Value numeric"
+msgstr "Valeur numerique"
+
+#. module: project_status_report
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_indicator_value_value_text
+msgid "Value text"
+msgstr "Valeur texte"
+
+#. module: project_status_report
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_indicator_value_type
+#: model:ir.model.fields,field_description:project_status_report.field_project_status_indicator_value_value_type
+#: model:ir.ui.view,arch_db:project_status_report.view_status_indicator_value_search
+msgid "Value type"
+msgstr "Type de valeur"
+
+#. module: project_status_report
+#: model:ir.ui.view,arch_db:project_status_report.view_status_indicator_value_search
+msgid "Value type : Boolean"
+msgstr "Type de valeur : Booléen"
+
+#. module: project_status_report
+#: model:ir.ui.view,arch_db:project_status_report.view_status_indicator_value_search
+msgid "Value type : Numeric"
+msgstr "Type de valeur : Numerique"
+
+#. module: project_status_report
+#: model:ir.ui.view,arch_db:project_status_report.view_status_indicator_value_search
+msgid "Value type : Text"
+msgstr "Type de valeur : Texte"
+
+#. module: project_status_report
+#: selection:project.status.report,cost_status:0
+#: selection:project.status.report,delay_status:0
+#: selection:project.status.report,global_status:0
+#: selection:project.status.report,quality_status:0
+msgid "Warning"
+msgstr "Alerte"
+
+#. module: project_status_report
+#: model:ir.model,name:project_status_report.model_project_status_indicator
+msgid "project.status.indicator"
+msgstr "project.status.indicator"
+
+#. module: project_status_report
+#: model:ir.model,name:project_status_report.model_project_status_indicator_value
+msgid "project.status.indicator.value"
+msgstr "project.status.indicator.value"
+
+#. module: project_status_report
+#: model:ir.model,name:project_status_report.model_project_status_report
+msgid "project.status.report"
+msgstr "project.status.report"
+
+#. module: project_status_report
+#: model:ir.model,name:project_status_report.model_project_task_snapshot
+msgid "project.task.snapshot"
+msgstr "project.task.snapshot"
+
