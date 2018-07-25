@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<odoo noupdate="1">
+    <record id="indicator_total_sale_amount" model="project.status.indicator">
+        <field name="name">Total sale amount</field>
+        <field name="sequence" eval="10"/>
+        <field name="value_type">numeric</field>
+        <field name="python_code">
+if sales:
+     value = sum(s.amount_total for s in sales)
+     color = '#0A55EE'
+else:
+    value = 0.0
+    color = red
+        </field>
+    </record>
+
+    <record id="indicator_invoiced_amount" model="project.status.indicator">
+        <field name="name">Invoiced amount</field>
+        <field name="sequence" eval="20"/>
+        <field name="value_type">numeric</field>
+        <field name="python_code">
+if invoices:
+    value = sum(i.amount_total for i in invoices)
+    color = "#123456"
+else:
+   value = 0.0
+   color = red
+        </field>
+    </record>
+
+    <record id="indicator_remaining_planned_hours" model="project.status.indicator">
+        <field name="name">Remaining planned hours</field>
+        <field name="sequence" eval="30"/>
+        <field name="value_type">numeric</field>
+        <field name="python_code">
+value = sum(self.task_ids.mapped('total_hours_spent'))
+color = orange
+        </field>
+    </record>
+
+</odoo>

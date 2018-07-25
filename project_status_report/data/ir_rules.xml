@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.rule" id="project_status_report_comp_rule">
+        <field name="name">Project Status Report: multi-company</field>
+        <field name="model_id" ref="model_project_status_report"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">['|',
+                                    ('project_id.company_id', '=', False),
+                                    ('project_id.company_id', 'child_of', [user.company_id.id]),
+                                    ]</field>
+    </record>
+
+    <record model="ir.rule" id="project_status_report_manager_rule">
+        <field name="name">Project Status Report: project manager: see all</field>
+        <field name="model_id" ref="model_project_status_report"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4,ref('project.group_project_manager'))]"/>
+    </record>
+
+
+    <record model="ir.rule" id="project_status_indicator_value_comp_rule">
+        <field name="name">Project Status Indicator value: multi-company</field>
+        <field name="model_id" ref="model_project_status_indicator_value"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">['|',
+                                    ('report_id.project_id.company_id', '=', False),
+                                    ('report_id.project_id.company_id', 'child_of', [user.company_id.id]),
+                                    ]</field>
+    </record>
+
+    <record model="ir.rule" id="project_status_indicator_value_manager_rule">
+        <field name="name">Project Status Indicator value: project manager: see all</field>
+        <field name="model_id" ref="model_project_status_indicator_value"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4,ref('project.group_project_manager'))]"/>
+    </record>
+</odoo>
