@@ -1,0 +1,1 @@
+purchase-workflow git@github.com:OCA/purchase-workflow.git 15.0
