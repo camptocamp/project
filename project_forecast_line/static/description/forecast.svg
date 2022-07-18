@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:i="http://ns.adobe.com/AdobeIllustrator/10.0/"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="150"
+   height="150"
+   viewBox="0 0 39.687499 39.687501"
+   version="1.1"
+   id="svg8"
+   inkscape:version="0.92.1 r15371"
+   sodipodi:docname="menu_icon.svg">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="2"
+     inkscape:cx="233.80017"
+     inkscape:cy="75.755145"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     units="px"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-257.31248)">
+    <rect
+       style="fill:#4d4d4d;fill-opacity:1;stroke:none;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4535"
+       width="39.956795"
+       height="39.956795"
+       x="0"
+       y="257.31046" />
+    <path
+       transform="matrix(0.70043886,0.71371241,-0.70043886,0.71371241,0,0)"
+       style="fill:#000000;fill-opacity:0.47142861;stroke:none;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 198.33662,168.68069 9.50338,2.22109 -0.0571,7.27486 18.01385,-0.20674 -0.29307,13.07498 -17.2495,17.20931 -10.97123,-10.92215 v -8.84425 l 1.05363,-2.2541 z"
+       id="rect4573"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccccccccc" />
+    <switch
+       id="switch4497"
+       transform="matrix(0.31180839,0,0,0.31180839,4.2902798,261.4163)"
+       style="fill:#ffffff;fill-opacity:1">
+      <foreignObject
+         requiredExtensions="http://ns.adobe.com/AdobeIllustrator/10.0/"
+         x="0"
+         y="0"
+         width="1"
+         height="1" />
+      <g
+         i:extraneous="self"
+         id="g4495"
+         style="fill:#ffffff;fill-opacity:1">
+        <g
+           id="g4493"
+           style="fill:#ffffff;fill-opacity:1">
+          <polygon
+             style="fill:#ffffff;fill-opacity:1"
+             points="32,46.525 32,100 7,100 7,62.265 "
+             id="polygon4485" />
+          <polygon
+             style="fill:#ffffff;fill-opacity:1"
+             points="39,48.166 39,100 63,100 63,82.017 55.687,79.916 62.886,71.654 "
+             id="polygon4487" />
+          <g
+             id="g4491"
+             style="fill:#ffffff;fill-opacity:1">
+            <polygon
+               style="fill:#ffffff;fill-opacity:1"
+               points="52.859,1.695 57.779,11.258 6,44.586 6,54.64 36.494,35.133 71.305,69.409 63.183,77.807 93.763,85.972 85.656,55.498 77.39,63.848 44.101,30.703 63.195,18.549 69.271,28.646 84.399,0.959 "
+               id="polygon4489" />
+          </g>
+        </g>
+      </g>
+    </switch>
+  </g>
+</svg>
