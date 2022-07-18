@@ -1,0 +1,1 @@
+odoo-addon-project_forecast_line @ git+https://github.com/OCA/project@refs/pull/957/head#subdirectory=setup/project_forecast_line
