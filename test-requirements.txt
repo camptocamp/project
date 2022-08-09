@@ -1,1 +1,2 @@
 odoo-addon-purchase_analytic_global @ git+https://github.com/OCA/purchase-workflow@refs/pull/1449/head#subdirectory=setup/purchase_analytic_global
+odoo-addon-project_forecast_line @ git+https://github.com/OCA/project@refs/pull/957/head#subdirectory=setup/project_forecast_line

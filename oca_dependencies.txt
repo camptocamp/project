@@ -1,1 +1,2 @@
 purchase-workflow git@github.com:OCA/purchase-workflow.git 15.0
+hr-holidays git@github.com:OCA/hr-holidays.git 15.0
