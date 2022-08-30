@@ -91,15 +91,25 @@ class ForecastLine(models.Model):
         date_froms = self.mapped("date_from")
         date_tos = self.mapped("date_to")
         if employees:
-            lines = self.search(
-                [
-                    ("employee_id", "in", employees.ids),
-                    ("res_model", "=", "hr.employee.forecast.role"),
-                    ("date_from", ">=", min(date_froms)),
-                    ("date_to", "<=", max(date_tos)),
-                    ("type", "=", "confirmed"),
-                ]
+            domain = [
+                ("employee_id", "in", employees.ids),
+                ("res_model", "=", "hr.employee.forecast.role"),
+                ("date_from", ">=", min(date_froms)),
+                ("date_to", "<=", max(date_tos)),
+                ("type", "=", "confirmed"),
+            ]
+            forecast_domain = domain.copy()
+            positive_capacity_lines = self.search(
+                forecast_domain
+                + [("forecast_role_id", "in", self.forecast_role_id.ids)]
             )
+            if positive_capacity_lines:
+                lines = positive_capacity_lines
+            else:
+                main_role_ids = employees.mapped("main_role_id")
+                lines = self.search(
+                    domain + [("forecast_role_id", "in", main_role_ids.ids)]
+                )
         else:
             lines = self.env["forecast.line"]
         capacities = {}
