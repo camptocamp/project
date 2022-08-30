@@ -610,3 +610,127 @@ class TestForecastLineProject(BaseForecastLineTest):
                 ),
                 -0.75000,
             )
+
+    def test_task_forecast_lines_employee_different_roles(self):
+        self.env["hr.employee.forecast.role"].create(
+            {
+                "employee_id": self.employee_consultant.id,
+                "role_id": self.role_pm.id,
+                "date_start": "2022-01-01",
+                "rate": 25,
+                "sequence": 1,
+            }
+        )
+        consultant_role = self.env["hr.employee.forecast.role"].search(
+            [
+                ("employee_id", "=", self.employee_consultant.id),
+                ("role_id", "=", self.role_consultant.id),
+            ]
+        )
+        consultant_role.rate = 75
+        with freeze_time("2022-01-01"):
+            project = self.env["project.project"].create(
+                {"name": "TestProjectDiffRoles"}
+            )
+            # set project in stage "in progress" to get confirmed forecast
+            project.stage_id = self.env.ref("project.project_project_stage_1")
+            task = self.env["project.task"].create(
+                {
+                    "name": "TaskDiffRoles",
+                    "project_id": project.id,
+                    "forecast_role_id": self.role_consultant.id,
+                    "forecast_date_planned_start": "2022-02-14",
+                    "forecast_date_planned_end": "2022-02-14",
+                }
+            )
+            task.remaining_hours = 8
+            task.user_ids = self.user_consultant
+            task_forecast = self.env["forecast.line"].search(
+                [("task_id", "=", task.id)]
+            )
+            self.assertEqual(len(task_forecast), 1)
+            # using assertEqual on purpose here
+            self.assertEqual(task_forecast.forecast_hours, -8.0)
+            self.assertEqual(round(task_forecast.consolidated_forecast, 5), 1.0)
+            employee_forecast = self.env["forecast.line"].search(
+                [("employee_id", "=", self.employee_consultant.id)]
+            )
+            # we can take first line to check as forecast values are equal
+            employee_forecast_consultant = employee_forecast.filtered(
+                lambda l: l.res_model == "hr.employee.forecast.role"
+                and l.forecast_role_id == self.role_consultant
+            )[0]
+            self.assertEqual(employee_forecast_consultant.forecast_hours, 6.0)
+            self.assertEqual(
+                round(employee_forecast_consultant.consolidated_forecast, 5), 0.75000
+            )
+            employee_forecast_pm = employee_forecast.filtered(
+                lambda l: l.res_model == "hr.employee.forecast.role"
+                and l.forecast_role_id == self.role_pm
+            )[0]
+            self.assertEqual(employee_forecast_pm.forecast_hours, 2.0)
+            self.assertEqual(
+                round(employee_forecast_pm.consolidated_forecast, 5), 0.25000
+            )
+
+    def test_task_forecast_lines_employee_main_role(self):
+        self.env["hr.employee.forecast.role"].create(
+            {
+                "employee_id": self.employee_consultant.id,
+                "role_id": self.role_pm.id,
+                "date_start": "2022-01-01",
+                "rate": 25,
+                "sequence": 1,
+            }
+        )
+        consultant_role = self.env["hr.employee.forecast.role"].search(
+            [
+                ("employee_id", "=", self.employee_consultant.id),
+                ("role_id", "=", self.role_consultant.id),
+            ]
+        )
+        consultant_role.rate = 75
+        with freeze_time("2022-01-01"):
+            project = self.env["project.project"].create(
+                {"name": "TestProjectDiffRoles"}
+            )
+            # set project in stage "in progress" to get confirmed forecast
+            project.stage_id = self.env.ref("project.project_project_stage_1")
+            task = self.env["project.task"].create(
+                {
+                    "name": "TaskDiffRoles",
+                    "project_id": project.id,
+                    "forecast_role_id": self.role_developer.id,
+                    "forecast_date_planned_start": "2022-02-14",
+                    "forecast_date_planned_end": "2022-02-14",
+                }
+            )
+            task.remaining_hours = 8
+            task.user_ids = self.user_consultant
+            task_forecast = self.env["forecast.line"].search(
+                [("task_id", "=", task.id)]
+            )
+            self.assertEqual(len(task_forecast), 1)
+            # using assertEqual on purpose here
+            self.assertEqual(task_forecast.forecast_hours, -8.0)
+            self.assertEqual(round(task_forecast.consolidated_forecast, 5), 1.0)
+            employee_forecast = self.env["forecast.line"].search(
+                [("employee_id", "=", self.employee_consultant.id)]
+            )
+            # we can take first line to check as forecast values are equal
+            employee_forecast_consultant = employee_forecast.filtered(
+                lambda l: l.res_model == "hr.employee.forecast.role"
+                and l.forecast_role_id == self.role_consultant
+            )[0]
+            self.assertEqual(employee_forecast_consultant.forecast_hours, 6.0)
+            self.assertEqual(
+                round(employee_forecast_consultant.consolidated_forecast, 5), 0.75000
+            )
+            employee_forecast_pm = employee_forecast.filtered(
+                lambda l: l.res_model == "hr.employee.forecast.role"
+                and l.forecast_role_id == self.role_pm
+            )[0]
+            self.assertEqual(employee_forecast_pm.forecast_hours, 2.0)
+            self.assertEqual(
+                round(employee_forecast_pm.consolidated_forecast, 5), 0.25000
+            )
