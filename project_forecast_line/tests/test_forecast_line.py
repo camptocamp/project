@@ -625,7 +625,7 @@ class TestForecastLineProject(BaseForecastLineTest):
 
         res_model	                forecast_role_id  forecast_hours consolidated_forecast
         project.task	            consultant	         -8	             1 (in days)
-        hr.employee.forecast.role	consultant	          6	            0.75 (in days)
+        hr.employee.forecast.role	consultant	          6	            -0.25 (in days)
         hr.employee.forecast.role	project manager	      2	            0.25 (in days)
 
         """
@@ -673,20 +673,18 @@ class TestForecastLineProject(BaseForecastLineTest):
                 [("employee_id", "=", self.employee_consultant.id)]
             )
             # we can take first line to check as forecast values are equal
-            employee_forecast_consultant = employee_forecast.filtered(
+            forecast_consultant = employee_forecast.filtered(
                 lambda l: l.res_model == "hr.employee.forecast.role"
                 and l.forecast_role_id == self.role_consultant
             )[0]
-            self.assertEqual(employee_forecast_consultant.forecast_hours, 6.0)
-            self.assertAlmostEqual(
-                employee_forecast_consultant.consolidated_forecast, 0.75
-            )
-            employee_forecast_pm = employee_forecast.filtered(
+            self.assertEqual(forecast_consultant.forecast_hours, 6.0)
+            self.assertAlmostEqual(forecast_consultant.consolidated_forecast, -0.25)
+            forecast_pm = employee_forecast.filtered(
                 lambda l: l.res_model == "hr.employee.forecast.role"
                 and l.forecast_role_id == self.role_pm
             )[0]
-            self.assertEqual(employee_forecast_pm.forecast_hours, 2.0)
-            self.assertAlmostEqual(employee_forecast_pm.consolidated_forecast, 0.25)
+            self.assertEqual(forecast_pm.forecast_hours, 2.0)
+            self.assertAlmostEqual(forecast_pm.consolidated_forecast, 0.25)
 
     def test_task_forecast_lines_employee_main_role(self):
         """
@@ -745,17 +743,15 @@ class TestForecastLineProject(BaseForecastLineTest):
                 [("employee_id", "=", self.employee_consultant.id)]
             )
             # we can take first line to check as forecast values are equal
-            employee_forecast_consultant = employee_forecast.filtered(
+            forecast_consultant = employee_forecast.filtered(
                 lambda l: l.res_model == "hr.employee.forecast.role"
                 and l.forecast_role_id == self.role_consultant
             )[0]
-            self.assertEqual(employee_forecast_consultant.forecast_hours, 6.0)
-            self.assertAlmostEqual(
-                employee_forecast_consultant.consolidated_forecast, 0.75
-            )
-            employee_forecast_pm = employee_forecast.filtered(
+            self.assertEqual(forecast_consultant.forecast_hours, 6.0)
+            self.assertAlmostEqual(forecast_consultant.consolidated_forecast, -0.25)
+            forecast_pm = employee_forecast.filtered(
                 lambda l: l.res_model == "hr.employee.forecast.role"
                 and l.forecast_role_id == self.role_pm
             )[0]
-            self.assertEqual(employee_forecast_pm.forecast_hours, 2.0)
-            self.assertAlmostEqual(employee_forecast_pm.consolidated_forecast, 0.25)
+            self.assertEqual(forecast_pm.forecast_hours, 2.0)
+            self.assertAlmostEqual(forecast_pm.consolidated_forecast, 0.25)
