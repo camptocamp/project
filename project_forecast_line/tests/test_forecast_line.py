@@ -499,8 +499,8 @@ class TestForecastLineProject(BaseForecastLineTest):
             )
             self.assertEqual(len(employee_forecast), 1)
             project = self.env["project.project"].create({"name": "TestProject"})
-            # set project in stage "in progress" to get confirmed forecast
-            project.stage_id = self.env.ref("project.project_project_stage_1")
+            # set project in stage "to do" to get forecast
+            project.stage_id = self.env.ref("project.project_project_stage_0")
             task = self.env["project.task"].create(
                 {
                     "name": "Task1",
@@ -518,9 +518,14 @@ class TestForecastLineProject(BaseForecastLineTest):
             # using assertEqual on purpose here
             self.assertEqual(forecast.forecast_hours, -6.0)
             self.assertAlmostEqual(forecast.consolidated_forecast, 0.75)
+            self.assertAlmostEqual(forecast.confirmed_consolidated_forecast, 0.75)
             self.assertEqual(
                 forecast.employee_resource_forecast_line_id.consolidated_forecast,
                 0.25,
+            )
+            self.assertEqual(
+                forecast.employee_resource_forecast_line_id.confirmed_consolidated_forecast,
+                1.0,
             )
 
     def test_task_forecast_lines_consolidated_forecast_overallocation(self):
@@ -533,8 +538,8 @@ class TestForecastLineProject(BaseForecastLineTest):
             )
             self.assertEqual(len(employee_forecast), 1)
             project = self.env["project.project"].create({"name": "TestProject"})
-            # set project in stage "in progress" to get confirmed forecast
-            project.stage_id = self.env.ref("project.project_project_stage_1")
+            # set project in stage "to do" to get forecast
+            project.stage_id = self.env.ref("project.project_project_stage_0")
             task = self.env["project.task"].create(
                 {
                     "name": "Task1",
@@ -552,9 +557,14 @@ class TestForecastLineProject(BaseForecastLineTest):
             # using assertEqual on purpose here
             self.assertEqual(forecast.forecast_hours, -10.0)
             self.assertEqual(forecast.consolidated_forecast, 1.25)
+            self.assertEqual(forecast.confirmed_consolidated_forecast, 1.25)
             self.assertEqual(
                 forecast.employee_resource_forecast_line_id.consolidated_forecast,
                 -0.25,
+            )
+            self.assertEqual(
+                forecast.employee_resource_forecast_line_id.confirmed_consolidated_forecast,
+                1.0,
             )
 
     def test_task_forecast_lines_consolidated_forecast_overallocation_multiple_tasks(
@@ -569,8 +579,8 @@ class TestForecastLineProject(BaseForecastLineTest):
             )
             self.assertEqual(len(employee_forecast), 1)
             project = self.env["project.project"].create({"name": "TestProject"})
-            # set project in stage "in progress" to get confirmed forecast
-            project.stage_id = self.env.ref("project.project_project_stage_1")
+            # set project in stage "to do" to get forecast
+            project.stage_id = self.env.ref("project.project_project_stage_0")
             task1 = self.env["project.task"].create(
                 {
                     "name": "Task1",
@@ -606,6 +616,10 @@ class TestForecastLineProject(BaseForecastLineTest):
             self.assertAlmostEqual(
                 forecast1.employee_resource_forecast_line_id.consolidated_forecast,
                 -0.75,
+            )
+            self.assertAlmostEqual(
+                forecast1.employee_resource_forecast_line_id.confirmed_consolidated_forecast,
+                1.0,
             )
 
     def test_task_forecast_lines_employee_different_roles(self):
@@ -643,8 +657,8 @@ class TestForecastLineProject(BaseForecastLineTest):
         )
         consultant_role.rate = 75
         project = self.env["project.project"].create({"name": "TestProjectDiffRoles"})
-        # set project in stage "in progress" to get confirmed forecast
-        project.stage_id = self.env.ref("project.project_project_stage_1")
+        # set project in stage "to do" to get forecast
+        project.stage_id = self.env.ref("project.project_project_stage_0")
         task = self.env["project.task"].create(
             {
                 "name": "TaskDiffRoles",
@@ -661,6 +675,7 @@ class TestForecastLineProject(BaseForecastLineTest):
         # using assertEqual on purpose here
         self.assertEqual(task_forecast.forecast_hours, -8.0)
         self.assertEqual(task_forecast.consolidated_forecast, 1.0)
+        self.assertEqual(task_forecast.confirmed_consolidated_forecast, 1.0)
         employee_forecast = self.env["forecast.line"].search(
             [("employee_id", "=", self.employee_consultant.id)]
         )
@@ -671,12 +686,16 @@ class TestForecastLineProject(BaseForecastLineTest):
         )[0]
         self.assertEqual(forecast_consultant.forecast_hours, 6.0)
         self.assertAlmostEqual(forecast_consultant.consolidated_forecast, -0.25)
+        self.assertAlmostEqual(
+            forecast_consultant.confirmed_consolidated_forecast, 0.75
+        )
         forecast_pm = employee_forecast.filtered(
             lambda l: l.res_model == "hr.employee.forecast.role"
             and l.forecast_role_id == self.role_pm
         )[0]
         self.assertEqual(forecast_pm.forecast_hours, 2.0)
         self.assertAlmostEqual(forecast_pm.consolidated_forecast, 0.25)
+        self.assertAlmostEqual(forecast_pm.confirmed_consolidated_forecast, 0.25)
 
     def test_task_forecast_lines_employee_main_role(self):
         """
@@ -732,6 +751,7 @@ class TestForecastLineProject(BaseForecastLineTest):
         # using assertEqual on purpose here
         self.assertEqual(task_forecast.forecast_hours, -8.0)
         self.assertEqual(task_forecast.consolidated_forecast, 1.0)
+        self.assertEqual(task_forecast.confirmed_consolidated_forecast, 1.0)
         employee_forecast = self.env["forecast.line"].search(
             [("employee_id", "=", self.employee_consultant.id)]
         )
@@ -742,9 +762,13 @@ class TestForecastLineProject(BaseForecastLineTest):
         )[0]
         self.assertEqual(forecast_consultant.forecast_hours, 6.0)
         self.assertAlmostEqual(forecast_consultant.consolidated_forecast, -0.25)
+        self.assertAlmostEqual(
+            forecast_consultant.confirmed_consolidated_forecast, -0.25
+        )
         forecast_pm = employee_forecast.filtered(
             lambda l: l.res_model == "hr.employee.forecast.role"
             and l.forecast_role_id == self.role_pm
         )[0]
         self.assertEqual(forecast_pm.forecast_hours, 2.0)
         self.assertAlmostEqual(forecast_pm.consolidated_forecast, 0.25)
+        self.assertAlmostEqual(forecast_pm.confirmed_consolidated_forecast, 0.25)
