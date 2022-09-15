@@ -748,3 +748,29 @@ class TestForecastLineProject(BaseForecastLineTest):
         )[0]
         self.assertEqual(forecast_pm.forecast_hours, 2.0)
         self.assertAlmostEqual(forecast_pm.consolidated_forecast, 0.25)
+
+    def test_task_forecast_lines_consumption_states(self):
+        project = self.env["project.project"].create({"name": "TestProject"})
+        # set project in stage "to do" and compute consolidated forecast
+        project.stage_id = self.env.ref("project.project_project_stage_0")
+        task = self.env["project.task"].create(
+            {
+                "name": "Task1",
+                "project_id": project.id,
+                "forecast_role_id": self.role_consultant.id,
+                "forecast_date_planned_start": date.today(),
+                "forecast_date_planned_end": date.today(),
+                "planned_hours": 6,
+            }
+        )
+        task.remaining_hours = 6
+        task.user_ids = self.user_consultant
+        forecast = self.env["forecast.line"].search([("task_id", "=", task.id)])
+        self.assertEqual(len(forecast), 1)
+        # using assertEqual on purpose here
+        self.assertEqual(forecast.forecast_hours, -6.0)
+        self.assertAlmostEqual(forecast.consolidated_forecast, 0.75)
+        self.assertNotEqual(
+            forecast.consolidated_forecast,
+            forecast.confirmed_consolidated_forecast,
+        )

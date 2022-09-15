@@ -62,10 +62,17 @@ class ForecastLine(models.Model):
     )
     consolidated_forecast = fields.Float(
         digits=(12, 5),
+        help="Consolidated forecast for lines of all types consumed",
         store=True,
         compute="_compute_consolidated_forecast",
     )
-
+    confirmed_consolidated_forecast = fields.Float(
+        string="Confirmed lines consolidated forecast",
+        help="Consolidated forecast for lines of type confirmed",
+        digits=(12, 5),
+        store=True,
+        compute="_compute_consolidated_forecast",
+    )
     currency_id = fields.Many2one(related="company_id.currency_id", store=True)
     company_id = fields.Many2one(
         "res.company", required=True, default=lambda s: s.env.company
@@ -90,8 +97,23 @@ class ForecastLine(models.Model):
         "forecast.line", "employee_resource_forecast_line_id"
     )
 
+    def _get_consumption_states(self):
+        """
+        Hook here to take control on states
+        for which the consumption is confirmed or not.
+        For instance, holidays requests and sales quotation lines
+        create lines of type "forecast" and won't be taken into account
+        during consolidated forecast computation, whereas tasks for project
+        which are in a running state create lines with type "confirmed"
+        and will be used to compute consolidated forecast.
+        """
+        return ("confirmed",)
+
     @api.depends("employee_id", "date_from", "type", "res_model")
-    def _compute_employee_forecast_line_id(self):
+    def _compute_employee_forecast_line_id(
+        self, consumption_states=lambda self: self._get_consumption_states()
+    ):
+        consumed = consumption_states(self)
         employees = self.mapped("employee_id")
         main_roles = employees.mapped("main_role_id")
         date_froms = self.mapped("date_from")
@@ -116,7 +138,7 @@ class ForecastLine(models.Model):
                 (line.employee_id.id, line.date_from, line.forecast_role_id.id)
             ] = line.id
         for rec in self:
-            if rec.type == "confirmed" and rec.res_model != "hr.employee.forecast.role":
+            if rec.type in consumed and rec.res_model != "hr.employee.forecast.role":
                 resource_forecast_line = capacities.get(
                     (rec.employee_id.id, rec.date_from, rec.forecast_role_id.id), False
                 )
@@ -131,6 +153,16 @@ class ForecastLine(models.Model):
                     )
             else:
                 rec.employee_resource_forecast_line_id = False
+
+    def _get_resource_forecast_line_values(self):
+        data = {}
+        for d in self.env["forecast.line"].read_group(
+            [("employee_resource_forecast_line_id", "in", self.ids)],
+            fields=["forecast_hours"],
+            groupby=["employee_resource_forecast_line_id"],
+        ):
+            data[d["employee_resource_forecast_line_id"][0]] = d["forecast_hours"]
+        return data
 
     def _convert_forecast(self, data):
         """
@@ -151,15 +183,24 @@ class ForecastLine(models.Model):
 
     @api.depends("employee_resource_consumption_ids.forecast_hours", "forecast_hours")
     def _compute_consolidated_forecast(self):
-        data = {}
-        for d in self.env["forecast.line"].read_group(
-            [("employee_resource_forecast_line_id", "in", self.ids)],
-            fields=["forecast_hours"],
-            groupby=["employee_resource_forecast_line_id"],
-        ):
-            data[d["employee_resource_forecast_line_id"][0]] = d["forecast_hours"]
+        """
+        The idea is to use same computed method for consolidated forecast fields,
+        for possible forecast lines type extending.
+        Here we compute consolidated forecast only for confirmed forecast lines
+        and both forecast and confirmed forecast line types
+        """
+
+        confirmed_lines_values = self._get_resource_forecast_line_values()
+        self._compute_employee_forecast_line_id(
+            consumption_states=lambda self: self._get_consumption_states()
+            + ("forecast",)
+        )
+        consumed_lines_values = self._get_resource_forecast_line_values()
         for rec in self:
-            rec.consolidated_forecast = rec._convert_forecast(data)
+            rec.confirmed_consolidated_forecast = rec._convert_forecast(
+                confirmed_lines_values
+            )
+            rec.consolidated_forecast = rec._convert_forecast(consumed_lines_values)
 
     def prepare_forecast_lines(
         self,
