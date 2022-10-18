@@ -38,6 +38,17 @@ class ProjectTask(models.Model):
             "user_ids",
         ]
 
+    def _get_written_computed_fields(self, values):
+        # get written and computed field names
+        task_computed = []
+        written_fields = list(values.keys())
+        tree = self.pool.field_triggers.get(self._fields[next(iter(written_fields))])
+        tocompute = self.sudo().with_context(active_test=False)._modified_triggers(tree)
+        for field, _records, _create in tocompute:
+            if field.model_name == "project.task":
+                task_computed.append(field.name)
+        return written_fields + task_computed
+
     def write(self, values):
         # compatibility with fields from project_enterprise
         if "planned_date_begin" in values:
@@ -45,9 +56,9 @@ class ProjectTask(models.Model):
         if "planned_date_end" in values:
             values["forecast_date_planned_end"] = values["planned_date_end"]
         res = super().write(values)
-        written_fields = list(values.keys())
+        written_computed_fields = self._get_written_computed_fields(values)
         trigger_fields = self._update_forecast_lines_trigger_fields()
-        if any(field in written_fields for field in trigger_fields):
+        if any(field in written_computed_fields for field in trigger_fields):
             self._update_forecast_lines()
         return res
 
