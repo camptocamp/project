@@ -4,6 +4,8 @@ import logging
 
 from odoo import api, fields, models
 
+from ..utils import get_written_computed_fields
+
 _logger = logging.getLogger(__name__)
 
 
@@ -45,9 +47,11 @@ class ProjectTask(models.Model):
         if "planned_date_end" in values:
             values["forecast_date_planned_end"] = values["planned_date_end"]
         res = super().write(values)
-        written_fields = list(values.keys())
+        written_computed_fields = get_written_computed_fields(
+            self, tuple(sorted(values))
+        )
         trigger_fields = self._update_forecast_lines_trigger_fields()
-        if any(field in written_fields for field in trigger_fields):
+        if any(field in written_computed_fields for field in trigger_fields):
             self._update_forecast_lines()
         return res
 
