@@ -4,6 +4,8 @@ import logging
 
 from odoo import api, fields, models
 
+from ..utils import get_written_computed_fields
+
 _logger = logging.getLogger(__name__)
 
 
@@ -85,23 +87,11 @@ class SaleOrderLine(models.Model):
             "name",
         ]
 
-    def _get_written_computed_fields(self, values):
-        # get written and computed field names
-        task_computed = []
-        written_fields = list(values.keys())
-        tree = self.pool.field_triggers.get(self._fields[next(iter(written_fields))])
-        if tree:
-            tocompute = (
-                self.sudo().with_context(active_test=False)._modified_triggers(tree)
-            )
-            for field, _records, _create in tocompute:
-                if field.model_name == "sale.order.line":
-                    task_computed.append(field.name)
-        return written_fields + task_computed
-
     def write(self, values):
         res = super().write(values)
-        written_computed_fields = self._get_written_computed_fields(values)
+        written_computed_fields = get_written_computed_fields(
+            self, tuple(sorted(values))
+        )
         trigger_fields = self._update_forecast_lines_trigger_fields()
         if any(field in written_computed_fields for field in trigger_fields):
             self._update_forecast_lines()
