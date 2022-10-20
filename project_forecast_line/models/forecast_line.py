@@ -158,8 +158,12 @@ class ForecastLine(models.Model):
             data[line_id][d["type"]] += d["forecast_hours"]
         return data
 
+    @api.model
+    def _get_convert_uom(self):
+        return self.env.ref("uom.product_uom_day")
+
     def _convert_hours_to_days(self, hours):
-        to_convert_uom = self.env.ref("uom.product_uom_day")
+        to_convert_uom = self._get_convert_uom()
         project_time_mode_id = self.company_id.project_time_mode_id
         return project_time_mode_id._compute_quantity(
             hours, to_convert_uom, round=False
