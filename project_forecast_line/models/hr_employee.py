@@ -81,6 +81,13 @@ class HrEmployeeForecastRole(models.Model):
         self._update_forecast_lines()
         return res
 
+    def _update_only_active_employee(self):
+        """
+        This method is meant to be overriden to disable
+        forecast lines creation for inactive employee
+        """
+        return self.env.context.get("active_employee", False)
+
     def _update_forecast_lines(self):
         today = fields.Date.context_today(self)
         ForecastLine = self.env["forecast.line"].sudo()
@@ -100,6 +107,8 @@ class HrEmployeeForecastRole(models.Model):
         ).unlink()
         horizon_end = ForecastLine._company_horizon_end()
         for rec in self:
+            if self._update_only_active_employee() and not rec.employee_id.active:
+                continue
             if rec.date_end:
                 date_end = rec.date_end
             else:
