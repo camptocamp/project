@@ -21,6 +21,13 @@ class HrLeave(models.Model):
         self._update_forecast_lines()
         return res
 
+    def _update_only_active_employee(self):
+        """
+        This method is meant to be overriden to disable
+        forecast lines creation for inactive employee
+        """
+        return self.env.context.get("active_employee", False)
+
     def _update_forecast_lines(self):
         forecast_vals = []
         ForecastLine = self.env["forecast.line"].sudo()
@@ -36,6 +43,8 @@ class HrLeave(models.Model):
         # which isn't wanted on some projects
         # for more details see here: .../addons/hr/models/hr_employee.py#L22
         for leave in leaves.sudo():
+            if self._update_only_active_employee() and not leave.employee_id.active:
+                continue
             if not leave.employee_id.main_role_id:
                 _logger.warning(
                     "No forecast role for employee %s (%s)",
