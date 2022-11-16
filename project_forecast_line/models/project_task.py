@@ -71,6 +71,13 @@ class ProjectTask(models.Model):
                     task.forecast_role_id = employee.main_role_id
                     break
 
+    def _update_only_active_employee(self):
+        """
+        This method is meant to be overriden to disable
+        forecast lines creation for inactive employee
+        """
+        return self.env.context.get("active_employee", False)
+
     def _update_forecast_lines(self):
         today = fields.Date.context_today(self)
         forecast_vals = []
@@ -116,9 +123,7 @@ class ProjectTask(models.Model):
                 continue
             date_start = max(today, task.forecast_date_planned_start)
             date_end = max(today, task.forecast_date_planned_end)
-            employee_ids = task.mapped("user_ids.employee_id").ids
-            if not employee_ids:
-                employee_ids = [False]
+            employees = task.mapped("user_ids.employee_id") or [False]
             _logger.debug(
                 "compute forecast for task %s: %s to %s %sh",
                 task,
@@ -126,8 +131,10 @@ class ProjectTask(models.Model):
                 date_end,
                 task.remaining_hours,
             )
-            forecast_hours = task.remaining_hours / len(employee_ids)
-            for employee_id in employee_ids:
+            forecast_hours = task.remaining_hours / len(employees)
+            for employee_id in employees:
+                if self._update_only_active_employee() and not employee_id.active:
+                    continue
                 forecast_vals += ForecastLine.prepare_forecast_lines(
                     name=task.name,
                     date_from=date_start,
@@ -140,7 +147,7 @@ class ProjectTask(models.Model):
                     sale_line_id=task.sale_line_id.id,
                     task_id=task.id,
                     project_id=task.project_id.id,
-                    employee_id=employee_id,
+                    employee_id=employee_id.id if employee_id else False,
                     res_model=self._name,
                     res_id=task.id,
                 )
