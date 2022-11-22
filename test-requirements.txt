@@ -1,0 +1,1 @@
+odoo-addon-project_task_code @ git+https://github.com/OCA/project@refs/pull/1032/head#subdirectory=setup/project_task_code
