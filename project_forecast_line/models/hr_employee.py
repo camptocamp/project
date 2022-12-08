@@ -148,3 +148,11 @@ class HrEmployeeForecastRole(models.Model):
                 ]
             )
             to_update._update_forecast_lines()
+
+    def unlink(self):
+        res = super().unlink()
+        ForecastLine = self.env["forecast.line"].sudo()
+        ForecastLine.search(
+            [("res_id", "in", self.ids), ("res_model", "=", self._name)]
+        ).unlink()
+        return res
