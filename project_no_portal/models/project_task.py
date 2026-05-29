@@ -8,11 +8,8 @@ class ProjectTask(models.Model):
     _inherit = ["project.task", "project.portal.block.mixin"]
 
     def _set_share_task_action(self, enabled):
-        """Toggle the "Share Task" cog action, which opens portal.share (the
-        public link wizard).
-
-        ir.actions.act_window has no "active" field, so the action's presence in
-        the Action menu is controlled through binding_model_id.
+        """
+        Toggle the "Share Task" action, which opens portal.share.wizard
         """
         action = self.env.ref("project.portal_share_action", raise_if_not_found=False)
         if not action:

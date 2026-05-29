@@ -3,6 +3,8 @@
 from odoo.exceptions import AccessError, UserError, ValidationError
 from odoo.tests.common import TransactionCase
 
+from odoo.addons.project_no_portal.hooks import post_init_hook, uninstall_hook
+
 
 class TestProjectNoPortal(TransactionCase):
     @classmethod
@@ -54,9 +56,8 @@ class TestProjectNoPortal(TransactionCase):
         self.company.block_project_portal_access = enabled
 
     def _force_portal_visibility(self):
-        """Set privacy_visibility='portal' via raw SQL to bypass the python
-        constraint and simulate data that predates the block (or was created
-        while the block was off)."""
+        """Set privacy_visibility='portal'.
+        Use raw SQL to bypass the python constraint."""
         self.env.cr.execute(
             "UPDATE project_project SET privacy_visibility=%s WHERE id=%s",
             ("portal", self.project.id),
@@ -130,6 +131,27 @@ class TestProjectNoPortal(TransactionCase):
 
         self.env["project.project"]._set_share_project_action(False)
         self.assertFalse(action.binding_model_id)
+
+    # --- hooks ---------------------------------------------------------------
+
+    def test_post_init_hook_flips_portal_projects(self):
+        self._force_portal_visibility()
+        post_init_hook(self.env)
+        self.project.invalidate_recordset(["privacy_visibility"])
+        self.assertEqual(self.project.privacy_visibility, "employees")
+
+    def test_uninstall_hook_restores_actions(self):
+        task_action = self.env.ref("project.portal_share_action")
+        project_action = self.env.ref("project.project_share_wizard_action")
+        self.env["project.task"]._set_share_task_action(False)
+        self.env["project.project"]._set_share_project_action(True)
+
+        uninstall_hook(self.env)
+
+        self.assertEqual(
+            task_action.binding_model_id, self.env.ref("project.model_project_task")
+        )
+        self.assertFalse(project_action.binding_model_id)
 
     def test_block_off_portal_follower_can_access(self):
         """With the company's block off, standard Odoo behaviour is restored: a
