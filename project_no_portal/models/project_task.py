@@ -17,7 +17,5 @@ class ProjectTask(models.Model):
         action = self.env.ref("project.portal_share_action", raise_if_not_found=False)
         if not action:
             return
-        model = self.env.ref("project.model_project_task", raise_if_not_found=False)
-        if not model:
-            return
+        model = self.env.ref("project.model_project_task")
         action.binding_model_id = model.id if enabled else False

@@ -50,20 +50,11 @@ class ProjectProject(models.Model):
         return super().action_open_share_project_wizard()
 
     def _set_share_project_action(self, enabled):
-        """Toggle the "Share Project" action.
-
-        "Share Project" has no contextual action in core (it is a header button,
-        which this module removes), and ir.actions.act_window has no "active"
-        field, so it is toggled as a cog action through binding_model_id. The
-        wizard model project.share.wizard keeps its own manager-only ACL, so the
-        action stays effectively manager-only without touching its groups_id.
-        """
+        """Toggle the "Share Project" action"""
         action = self.env.ref(
             "project.project_share_wizard_action", raise_if_not_found=False
         )
         if not action:
             return
-        model = self.env.ref("project.model_project_project", raise_if_not_found=False)
-        if not model:
-            return
+        model = self.env.ref("project.model_project_project")
         action.binding_model_id = model.id if enabled else False
