@@ -11,6 +11,10 @@ class TestProjectNoPortal(TransactionCase):
         cls.env = cls.env(context=dict(cls.env.context, tracking_disable=True))
 
         cls.company = cls.env.company
+        # The block is opt-in (off by default); enable it for the company so the
+        # blocking tests exercise the feature. The "company allows" tests flip it
+        # back off.
+        cls.company.block_project_portal_access = True
         cls.portal_group = cls.env.ref("base.group_portal")
         cls.portal_partner = cls.env["res.partner"].create(
             {
@@ -63,7 +67,7 @@ class TestProjectNoPortal(TransactionCase):
         self.project.message_subscribe(partner_ids=[self.portal_partner.id])
         self.task.message_subscribe(partner_ids=[self.portal_partner.id])
 
-    # --- company blocks (default) -------------------------------------------
+    # --- company blocks -----------------------------------------------------
 
     def test_block_on_constraint_rejects_portal_visibility(self):
         with self.assertRaises(ValidationError):

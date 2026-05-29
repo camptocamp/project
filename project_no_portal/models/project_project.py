@@ -13,7 +13,11 @@ class ProjectProject(models.Model):
     )
 
     def _default_privacy_visibility(self):
-        return "employees"
+        # Core defaults to "portal"; avoid clashing with the constraint when the
+        # current company blocks portal access.
+        if self.env.company.block_project_portal_access:
+            return "employees"
+        return "portal"
 
     @api.constrains("privacy_visibility", "company_id")
     def _check_no_portal_visibility(self):

@@ -8,7 +8,7 @@ class ResCompany(models.Model):
 
     block_project_portal_access = fields.Boolean(
         string="Block portal access to projects and tasks",
-        default=True,
+        default=False,
         help="When enabled, portal users of this company cannot read its "
         "projects or tasks, and portal visibility cannot be set on them.",
     )
