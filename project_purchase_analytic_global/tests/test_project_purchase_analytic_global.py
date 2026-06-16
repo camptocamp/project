@@ -3,7 +3,8 @@
 
 from datetime import date
 
-from odoo.tests.common import Form, TransactionCase
+from odoo.tests import Form
+from odoo.tests.common import TransactionCase
 
 
 class TestProjectPurchaseAnalyticGlobal(TransactionCase):
@@ -20,7 +21,14 @@ class TestProjectPurchaseAnalyticGlobal(TransactionCase):
         cls.analytic_account1 = cls.AnalyticAccount.create(
             {"name": "Analytic Account 1", "plan_id": cls.analytic_plan.id}
         )
-        cls.product = cls.env.ref("product.product_product_4")
+        cls.product = cls.env["product.product"].create(
+            {
+                "name": "Test Product",
+                "type": "consu",
+                "list_price": 100.0,
+                "standard_price": 50.0,
+            }
+        )
         cls.project1 = cls.Project.create(
             {
                 "name": "Project1",
