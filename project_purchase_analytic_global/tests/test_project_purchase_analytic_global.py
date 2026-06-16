@@ -46,7 +46,6 @@ class TestProjectPurchaseAnalyticGlobal(TransactionCase):
             line_form.name = self.product.name
             line_form.product_qty = 10
             line_form.price_unit = 20
-            line_form.product_uom_id = self.product.uom_id
             line_form.date_planned = date.today()
         purchase_form.save()
         self.assertEqual(
