@@ -11,12 +11,14 @@ class TestProjectPurchaseAnalyticGlobal(TransactionCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.Project = cls.env["project.project"]
+        cls.AnalyticPlan = cls.env["account.analytic.plan"]
         cls.AnalyticAccount = cls.env["account.analytic.account"]
         cls.Partner = cls.env["res.partner"]
         cls.PurchaseOrder = cls.env["purchase.order"]
         cls.partner1 = cls.Partner.create({"name": "Partner1"})
+        cls.analytic_plan = cls.AnalyticPlan.create({"name": "Plan"})
         cls.analytic_account1 = cls.AnalyticAccount.create(
-            {"name": "Analytic Account 1"}
+            {"name": "Analytic Account 1", "plan_id": cls.analytic_plan.id}
         )
         cls.product = cls.env.ref("product.product_product_4")
         cls.project1 = cls.Project.create(
