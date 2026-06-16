@@ -32,7 +32,7 @@ class TestProjectPurchaseAnalyticGlobal(TransactionCase):
         cls.project1 = cls.Project.create(
             {
                 "name": "Project1",
-                "analytic_account_id": cls.analytic_account1.id,
+                "account_id": cls.analytic_account1.id,
             }
         )
 
@@ -50,5 +50,6 @@ class TestProjectPurchaseAnalyticGlobal(TransactionCase):
             line_form.date_planned = date.today()
         purchase_form.save()
         self.assertEqual(
-            purchase_order.account_analytic_id, self.project1.analytic_account_id
+            purchase_order.analytic_distribution,
+            {str(self.project1.account_id.id): 100.0},
         )
