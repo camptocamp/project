@@ -1,5 +1,6 @@
 # Copyright 2022 Camptocamp SA
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
+# pylint: disable=no-search-all,prefer-env-translation
 import logging
 
 from odoo import _, api, fields, models

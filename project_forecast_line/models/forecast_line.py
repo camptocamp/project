@@ -1,5 +1,6 @@
 # Copyright 2022 Camptocamp SA
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
+# pylint: disable=no-search-all
 import logging
 from datetime import datetime, time
 
@@ -484,7 +485,6 @@ class ForecastLine(models.Model):
             return super().unlink()
 
     @api.model_create_multi
-    @api.returns("self", lambda value: value.id)
     def create(self, vals_list):
         records = super().create(vals_list)
         employee_role_lines = records.filtered(

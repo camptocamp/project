@@ -1,5 +1,6 @@
 # Copyright 2022 Camptocamp SA
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
+# pylint: disable=no-search-all
 
 from dateutil.relativedelta import relativedelta
 
@@ -47,7 +48,6 @@ class HrEmployee(models.Model):
         return super().write(values)
 
     @api.model_create_multi
-    @api.returns("self", lambda value: value.id)
     def create(self, values):
         values = [self._check_job_role(val) for val in values]
         return super().create(values)
@@ -151,8 +151,10 @@ class HrEmployeeForecastRole(models.Model):
                 ]
             )
             forecast_vals += forecast_lines._update_forecast_lines(
-                name="Employee %s as %s (%d%%)"
-                % (rec.employee_id.name, rec.role_id.name, rec.rate),
+                name=(
+                    f"Employee {rec.employee_id.name} as "
+                    f"{rec.role_id.name} ({rec.rate}%)"
+                ),
                 date_from=date_start,
                 date_to=date_end,
                 forecast_hours=forecast * rec.rate / 100.0,

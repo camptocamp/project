@@ -727,7 +727,7 @@ class TestProjectTask(BaseForecastRoleTest):
         forecast_type = task_3.set_forecast_type()
         self.assertIsNone(
             forecast_type,
-            "set_forecast_type must return None when sale_line_id " "is in draft state",
+            "set_forecast_type must return None when sale_line_id is in draft state",
         )
 
         # Condition 4: No stage and no sale line → "forecast" (else branch)
