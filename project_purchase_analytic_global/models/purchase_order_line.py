@@ -11,7 +11,7 @@ class PurchaseOrderLine(models.Model):
     def _compute_account_analytic_id(self):
         # prevent standard account_analytic_id computation
         # if order is created from project with smart button
-        # providing account_analytic_id in context
-        if self.env.context.get("default_account_analytic_id"):
+        # providing analytic_distribution in context
+        if self.env.context.get("default_analytic_distribution"):
             return True
         return super()._compute_account_analytic_id()
