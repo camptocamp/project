@@ -3,6 +3,7 @@
 import logging
 
 from odoo import api, fields, models
+from odoo.fields import Domain
 
 _logger = logging.getLogger(__name__)
 
@@ -25,7 +26,7 @@ class SaleOrderLine(models.Model):
         ForecastLine = self.env["forecast.line"].sudo()
         # XXX try to be smarter and only unlink those needing unlinking, update the rest
         ForecastLine.search(
-            [("res_id", "in", self.ids), ("res_model", "=", self._name)]
+            Domain("res_id", "in", self.ids) & Domain("res_model", "=", self._name)
         ).unlink()
         for line in self:
             ForecastLine = ForecastLine.with_company(line.company_id)
@@ -68,13 +69,11 @@ class SaleOrderLine(models.Model):
         if force_company_id:
             companies = self.env["res.company"].browse(force_company_id)
         else:
-            companies = self.env["res.company"].search([])
+            companies = self.env["res.company"].search(Domain.TRUE)
         for company in companies:
             to_update = self.with_company(company).search(
-                [
-                    ("forecast_date_end", ">=", today),
-                    ("company_id", "=", company.id),
-                ]
+                Domain("forecast_date_end", ">=", today)
+                & Domain("company_id", "=", company.id)
             )
             to_update._update_forecast_lines()
 

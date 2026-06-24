@@ -57,8 +57,7 @@ class TestHrLeave(BaseForecastRoleTest):
         )
         self.assertFalse(
             forecast_lines,
-            "No forecast lines must be created when the employee "
-            "has no main_role_id",
+            "No forecast lines must be created when the employee has no main_role_id",
         )
 
     @freeze_time("2022-01-01 12:00:00")

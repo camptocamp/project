@@ -4,6 +4,7 @@ import logging
 import random
 
 from odoo import api, fields, models
+from odoo.fields import Domain
 
 _logger = logging.getLogger(__name__)
 
@@ -45,7 +46,7 @@ class ProjectTask(models.Model):
         if "allocated_hours" in values:
             for task in self:
                 forecast_lines = self.env["forecast.line"].search(
-                    [("task_id", "=", task.id)]
+                    Domain("task_id", "=", task.id)
                 )
                 if forecast_lines:
                     # Update each line based on the new total
@@ -72,7 +73,7 @@ class ProjectTask(models.Model):
             if task.forecast_role_id:
                 continue
             employees = self.env["hr.employee"].search(
-                [("user_id", "in", task.user_ids.ids)]
+                Domain("user_id", "in", task.user_ids.ids)
             )  # noqa : E501
             for employee in employees:
                 if employee.role_ids:
@@ -88,7 +89,7 @@ class ProjectTask(models.Model):
         ForecastLine = self.env["forecast.line"].sudo()
         for task in self:
             forecast_lines = ForecastLine.search(
-                [("res_model", "=", self._name), ("res_id", "=", task.id)]
+                Domain("res_model", "=", self._name) & Domain("res_id", "=", task.id)
             )
             total_forecast = sum(forecast_lines.mapped("forecast_hours"))
             if not forecast_lines or not total_forecast:
@@ -184,11 +185,9 @@ class ProjectTask(models.Model):
             forecast_hours = task.remaining_hours / len(employees)
             # remove lines for employees which are no longer assigned to the task
             ForecastLine.search(
-                [
-                    ("res_model", "=", self._name),
-                    ("res_id", "=", task.id),
-                    ("employee_id", "not in", tuple(employee_ids)),
-                ]
+                Domain("res_model", "=", self._name)
+                & Domain("res_id", "=", task.id)
+                & Domain("employee_id", "not in", tuple(employee_ids))
             ).unlink()
             for employee in employees:
                 if employee:
@@ -198,11 +197,9 @@ class ProjectTask(models.Model):
                     employee_id = False
                     company = task.company_id
                 employee_lines = ForecastLine.search(
-                    [
-                        ("res_model", "=", self._name),
-                        ("res_id", "=", task.id),
-                        ("employee_id", "=", employee_id),
-                    ]
+                    Domain("res_model", "=", self._name)
+                    & Domain("res_id", "=", task.id)
+                    & Domain("employee_id", "=", employee_id)
                 )
                 ForecastLine = ForecastLine.with_company(company)
                 forecast_vals += employee_lines._update_forecast_lines(
@@ -223,10 +220,8 @@ class ProjectTask(models.Model):
                 )
         if task_with_lines_to_clean:
             to_clean = ForecastLine.search(
-                [
-                    ("res_model", "=", self._name),
-                    ("res_id", "in", tuple(task_with_lines_to_clean)),
-                ]
+                Domain("res_model", "=", self._name)
+                & Domain("res_id", "in", tuple(task_with_lines_to_clean))
             )
             if to_clean:
                 to_clean.unlink()
@@ -239,12 +234,10 @@ class ProjectTask(models.Model):
         if force_company_id:
             companies = self.env["res.company"].browse(force_company_id)
         else:
-            companies = self.env["res.company"].search([])
+            companies = self.env["res.company"].search(Domain.TRUE)
         for company in companies:
             to_update = self.with_company(company).search(
-                [
-                    ("forecast_date_planned_end", ">=", today),
-                    ("company_id", "=", company.id),
-                ]
+                Domain("forecast_date_planned_end", ">=", today)
+                & Domain("company_id", "=", company.id)
             )
             to_update._update_forecast_lines()
