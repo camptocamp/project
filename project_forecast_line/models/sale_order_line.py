@@ -43,7 +43,7 @@ class SaleOrderLine(models.Model):
                 continue
             else:
                 forecast_type = "forecast"
-            uom = line.product_uom
+            uom = line.product_uom_id
             quantity_hours = uom._compute_quantity(
                 line.product_uom_qty, self.env.ref("uom.product_uom_hour")
             )
