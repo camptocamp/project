@@ -82,7 +82,6 @@ class BaseForecastRoleTest(TransactionCase):
                 "standard_price": 75,
                 "forecast_role_id": cls.role_developer.id,
                 "uom_id": cls.env.ref("uom.product_uom_hour").id,
-                "uom_po_id": cls.env.ref("uom.product_uom_hour").id,
             }
         )
         cls.product_consultant_tm = cls.ProductProduct.create(
@@ -94,7 +93,6 @@ class BaseForecastRoleTest(TransactionCase):
                 "standard_price": 80,
                 "forecast_role_id": cls.role_consultant.id,
                 "uom_id": cls.env.ref("uom.product_uom_hour").id,
-                "uom_po_id": cls.env.ref("uom.product_uom_hour").id,
             }
         )
 
@@ -107,7 +105,6 @@ class BaseForecastRoleTest(TransactionCase):
                 "standard_price": 100,
                 "forecast_role_id": cls.role_pm.id,
                 "uom_id": cls.env.ref("uom.product_uom_hour").id,
-                "uom_po_id": cls.env.ref("uom.product_uom_hour").id,
             }
         )
         cls.customer = cls.ResPartner.create({"name": "Some Customer"})
@@ -569,7 +566,7 @@ class TestForecastRoleTimesheet(BaseForecastRoleTest):
                     line.product_uom_qty = (
                         45 * 2
                     )  # 45 working days in the period, sell 2 FTE
-                    line.product_uom = self.env.ref("uom.product_uom_day")
+                    line.product_uom_id = self.env.ref("uom.product_uom_day")
             so = form.save()
             so.action_confirm()
 
