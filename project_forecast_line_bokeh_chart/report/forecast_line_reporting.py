@@ -2,7 +2,6 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 import json
 
-# pylint: disable=W7936
 from bokeh import palettes
 from bokeh.embed import components
 from bokeh.layouts import column
@@ -10,8 +9,12 @@ from bokeh.models import ColumnDataSource, FactorRange
 from bokeh.plotting import figure
 from dateutil.relativedelta import relativedelta
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 from odoo.tools import date_utils
+
+
+def _group_display_name(group_value):
+    return group_value[1] if group_value else False
 
 
 class ForecastLineReporting(models.TransientModel):
@@ -94,7 +97,7 @@ class ForecastLineReporting(models.TransientModel):
         else:
             domain.append(("employee_id", "=", False))
         groups = [
-            "date_from:%s" % self.granularity,
+            f"date_from:{self.granularity}",
             "employee_id",
             "project_id",
         ]
@@ -105,12 +108,11 @@ class ForecastLineReporting(models.TransientModel):
         projects = set()
         data_project = {}
         data_overload = {}
+        not_assigned = self.env._("Not assigned to an employee")
+        available = self.env._("Available")
+        overload = self.env._("Overload")
         for d in groupdata:
-            employee = d.get("employee_id")
-            if employee:
-                employee = employee[1]._value
-            else:
-                employee = _("Not assigned to an employee")
+            employee = _group_display_name(d.get("employee_id")) or not_assigned
             employees.add(employee)
             if employee not in data_project:
                 data_project[employee] = {}
@@ -119,13 +121,13 @@ class ForecastLineReporting(models.TransientModel):
             date = d["__range"]["date_from"]["from"]
             project = d.get("project_id")
             if project:
-                project = project[1]._value
+                project = _group_display_name(project)
                 data = data_project
             elif forecast >= 0:
-                project = _("Available")
+                project = available
                 data = data_project
             else:
-                project = _("Overload")
+                project = overload
                 data = data_overload
             projects.add(project)
             if project not in data[employee]:
@@ -134,13 +136,13 @@ class ForecastLineReporting(models.TransientModel):
             data[employee][project][x_key] = forecast
         employees = list(employees)
         employees.sort()
-        if _("Not assigned to an employee") in employees:
+        if not_assigned in employees:
             # make sure it is the last one
-            employees.remove(_("Not assigned to an employee"))
-            employees.append(_("Not assigned to an employee"))
+            employees.remove(not_assigned)
+            employees.append(not_assigned)
         projects = list(projects)
         projects.sort()
-        for name in [_("Available"), _("Overload")]:
+        for name in [available, overload]:
             if name in projects:
                 # make sure these two get in the first tow positions
                 projects.remove(name)
@@ -161,7 +163,7 @@ class ForecastLineReporting(models.TransientModel):
     def _build_empty_plot(self, height=300, width=1024):
         dates = self._get_time_range()
         p = figure(height=height, width=width, x_range=FactorRange(*dates))
-        p.title.text = _("Nothing to plot. Select some employees")
+        p.title.text = self.env._("Nothing to plot. Select some employees")
         return [p]
 
     def _get_palette(self, projects):
@@ -171,7 +173,7 @@ class ForecastLineReporting(models.TransientModel):
         else:
             step = len(palettes.Turbo256) // len(projects)
             project_colors = palettes.Turbo256[::step][: len(projects)]
-        return dict(zip(projects, project_colors))
+        return dict(zip(projects, project_colors, strict=False))
 
     def _build_plots(self, height=300, width=1024):
         employees, projects, data, data_overload = self._prepare_bokeh_chart_data()
