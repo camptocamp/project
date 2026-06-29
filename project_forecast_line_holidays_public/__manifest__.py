@@ -3,7 +3,7 @@
 {
     "name": "Project Forecast Lines Holidays Public",
     "summary": "Project Forecast Lines taking public holidays into account",
-    "version": "15.0.1.1.1",
+    "version": "19.0.1.1.1",
     "author": "Camptocamp, Odoo Community Association (OCA)",
     "license": "AGPL-3",
     "category": "Project",
