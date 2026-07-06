@@ -165,7 +165,7 @@ class ProjectTask(models.Model):
             if not task._should_have_forecast():
                 task_with_lines_to_clean.append(task.id)
                 continue
-            forecast_type = self.set_forecast_type()
+            forecast_type = task.set_forecast_type()
             if not forecast_type:
                 continue
             date_start = max(today, task.forecast_date_planned_start)

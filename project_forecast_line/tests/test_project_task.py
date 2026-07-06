@@ -413,6 +413,41 @@ class TestProjectTask(BaseForecastRoleTest):
         )
 
     @freeze_time("2022-02-14 12:00:00")
+    def test_update_forecast_lines_uses_each_task_forecast_type(self):
+        """Mixed task recordsets must not reuse another task's forecast type."""
+        sale_task, sale_order = self._make_task_with_sale_line(
+            "MixedSaleTask", so_state="sale", project_stage_id=False
+        )
+        self.assertEqual(sale_order.state, "sale")
+
+        project = self.ProjectProject.create({"name": "MixedStageProject"})
+        project.stage_id = self.env.ref("project.project_project_stage_1")
+        staged_task = self.ProjectTask.create(
+            {
+                "name": "Mixed Stage Task",
+                "project_id": project.id,
+                "forecast_role_id": self.role_consultant.id,
+                "forecast_date_planned_start": "2022-02-14",
+                "forecast_date_planned_end": "2022-02-14",
+                "allocated_hours": 8,
+                "remaining_hours": 8,
+            }
+        )
+
+        (sale_task | staged_task)._update_forecast_lines()
+        self.env.flush_all()
+        self.env.invalidate_all()
+
+        sale_lines = self.env["forecast.line"].search(
+            [("res_model", "=", "project.task"), ("res_id", "=", sale_task.id)]
+        )
+        staged_lines = self.env["forecast.line"].search(
+            [("res_model", "=", "project.task"), ("res_id", "=", staged_task.id)]
+        )
+        self.assertEqual(sale_lines.mapped("type"), ["confirmed"])
+        self.assertEqual(staged_lines.mapped("type"), ["forecast"])
+
+    @freeze_time("2022-02-14 12:00:00")
     def test_update_forecast_lines_no_cleanup_when_all_tasks_qualify(self):
         """when every task in the recordset still qualifies for a
         forecast, task_with_lines_to_clean stays empty and no unlink is called.
