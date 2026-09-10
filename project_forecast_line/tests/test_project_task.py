@@ -179,7 +179,7 @@ class TestProjectTask(BaseForecastRoleTest):
         )
 
     # ------------------------------------------------------------------
-    # Tests for project.task._write (models/project_task.py L56-L62)
+    # Tests for forecast recomputation triggered by stored computed fields
     # ------------------------------------------------------------------
 
     @freeze_time("2022-02-14 12:00:00")
@@ -212,7 +212,7 @@ class TestProjectTask(BaseForecastRoleTest):
 
         # Changing a trigger field (e.g. forecast_date_planned_end) causes the
         # computed field forecast_recomputation_trigger to be recomputed and
-        # stored via _write, which must call _update_forecast_lines().
+        # stored after its compute method regenerates the forecast lines.
         task.write({"forecast_date_planned_end": "2022-02-15"})
         self.env.flush_all()
         self.env.invalidate_all()
@@ -227,9 +227,8 @@ class TestProjectTask(BaseForecastRoleTest):
         )
 
     @freeze_time("2022-02-14 12:00:00")
-    def test_write_remaining_hours_calls_quick_update_forecast_lines(self):
-        """when remaining_hours changes (without a trigger-field change),
-        _quick_update_forecast_lines must scale existing lines proportionally."""
+    def test_write_remaining_hours_recomputes_forecast_lines(self):
+        """Changing remaining_hours must regenerate the forecast lines."""
         project = self.ProjectProject.create({"name": "TestWriteRemainingHours"})
         project.stage_id = self.env.ref("project.project_project_stage_1")
         task = self.ProjectTask.create(
@@ -254,16 +253,17 @@ class TestProjectTask(BaseForecastRoleTest):
         self.assertEqual(len(lines), 1)
         self.assertAlmostEqual(lines[0].forecast_hours, -8.0)
 
-        # Directly call _write with remaining_hours to simulate ORM internal path
-        task._write({"remaining_hours": 4.0})
+        task.write({"remaining_hours": 4.0})
         self.env.flush_all()
         self.env.invalidate_all()
 
-        # _quick_update_forecast_lines applies ratio: 4 / 8 = 0.5 → -4.0 h
+        lines = self.env["forecast.line"].search(
+            [("res_model", "=", "project.task"), ("res_id", "=", task.id)]
+        )
         self.assertAlmostEqual(
             lines[0].forecast_hours,
             -4.0,
-            msg="_quick_update_forecast_lines should scale forecast_hours by ratio",
+            msg="Forecast hours should follow the task's remaining hours",
         )
 
     @freeze_time("2022-02-14 12:00:00")

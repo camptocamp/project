@@ -28,7 +28,7 @@ class ProjectTask(models.Model):
             "forecast_role_id",
             "forecast_date_planned_start",
             "forecast_date_planned_end",
-            # "remaining_hours",
+            "remaining_hours",
             "name",
             # "planned_time",
             "user_ids",
@@ -41,6 +41,7 @@ class ProjectTask(models.Model):
         value = random.random()
         for rec in self:
             rec.forecast_recomputation_trigger = value
+        self._update_forecast_lines()
 
     def write(self, values):
         if "allocated_hours" in values:
@@ -53,16 +54,6 @@ class ProjectTask(models.Model):
                     new_val = -(values["allocated_hours"] / len(forecast_lines))
                     forecast_lines.write({"forecast_hours": new_val})
         return super().write(values)
-
-    def _write_multi(self, values):
-        res = super()._write_multi(values)
-        if "forecast_recomputation_trigger" in values[0]:
-            for records in self:
-                records._update_forecast_lines()
-        elif "remaining_hours" in values[0]:
-            for records in self:
-                records._quick_update_forecast_lines()
-        return res
 
     @api.onchange("user_ids")
     def onchange_user_ids(self):
