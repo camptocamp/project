@@ -8,6 +8,12 @@ from odoo.fields import Domain
 
 _logger = logging.getLogger(__name__)
 
+# precommit.data keys used to defer the forecast-lines cascades triggered by
+# _write_multi() below, one per cascade so an unrelated write doesn't
+# collapse them together.
+_FULL_UPDATE_PRECOMMIT_KEY = "project_forecast_line.full_update_task_ids"
+_QUICK_UPDATE_PRECOMMIT_KEY = "project_forecast_line.quick_update_task_ids"
+
 
 class ProjectTask(models.Model):
     _name = "project.task"
@@ -57,12 +63,48 @@ class ProjectTask(models.Model):
     def _write_multi(self, values):
         res = super()._write_multi(values)
         if "forecast_recomputation_trigger" in values[0]:
-            for records in self:
-                records._update_forecast_lines()
+            self._queue_forecast_lines_update(
+                _FULL_UPDATE_PRECOMMIT_KEY, "_update_forecast_lines"
+            )
         elif "remaining_hours" in values[0]:
-            for records in self:
-                records._quick_update_forecast_lines()
+            self._queue_forecast_lines_update(
+                _QUICK_UPDATE_PRECOMMIT_KEY, "_quick_update_forecast_lines"
+            )
         return res
+
+    def _queue_forecast_lines_update(self, precommit_key, method_name):
+        """Defer a forecast-lines cascade outside of the ORM flush that triggered it.
+
+        _write_multi() is called both by write()/_write() and by Odoo's own
+        flush of stored computed fields -- forecast_recomputation_trigger
+        and remaining_hours (from hr_timesheet) are both `store=True,
+        compute=...`. Running the cascade synchronously here nests another
+        flush while sibling, not-yet-flushed records of that same field are
+        still mid-flush, corrupting Odoo's flush bookkeeping::
+
+            AssertionError: Could not find all values of project.task(...) to flush them
+
+        `env.cr.precommit` defers it to run once, right before the real
+        transaction commits, well outside any flush() call stack -- and it
+        never fires during onchange (which never commits), so a virtual
+        preview can't create/unlink real forecast.line records.
+        """
+        real_ids = [rec.id for rec in self if rec.id]
+        if not real_ids:
+            return
+        pending = self.env.cr.precommit.data.setdefault(precommit_key, set())
+        if not pending:
+            self.env.cr.precommit.add(
+                lambda: self._run_queued_forecast_lines_update(
+                    precommit_key, method_name
+                )
+            )
+        pending.update(real_ids)
+
+    def _run_queued_forecast_lines_update(self, precommit_key, method_name):
+        ids = self.env.cr.precommit.data.pop(precommit_key, None)
+        if ids:
+            getattr(self.browse(ids).exists(), method_name)()
 
     @api.onchange("user_ids")
     def onchange_user_ids(self):
