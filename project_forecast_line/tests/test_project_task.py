@@ -482,8 +482,11 @@ class TestProjectTask(BaseForecastRoleTest):
         )
         self.assertEqual(sale_order.state, "sale")
 
+        # stage_0 -> forecast_line_type "forecast" (see data/project_data.xml);
+        # stage_1 is "confirmed", same as sale_task below, which wouldn't
+        # exercise the "each task keeps its own type" fix this test covers.
         project = self.ProjectProject.create({"name": "MixedStageProject"})
-        project.stage_id = self.env.ref("project.project_project_stage_1")
+        project.stage_id = self.env.ref("project.project_project_stage_0")
         staged_task = self.ProjectTask.create(
             {
                 "name": "Mixed Stage Task",

@@ -30,7 +30,7 @@ class TestHrLeave(BaseForecastRoleTest):
         leave_type = self.env["hr.leave.type"].create(
             {
                 "name": "Test Leave Type",
-                "requires_allocation": "no",
+                "requires_allocation": False,
             }
         )
         leave = (
@@ -75,7 +75,7 @@ class TestHrLeave(BaseForecastRoleTest):
         leave_type = self.env["hr.leave.type"].create(
             {
                 "name": "Test Leave Type 2",
-                "requires_allocation": "no",
+                "requires_allocation": False,
             }
         )
         leave = (
