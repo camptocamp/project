@@ -7,7 +7,7 @@ from odoo import fields
 from odoo.addons.project_forecast_line.tests import test_forecast_line
 
 
-class PublicHolidaysForecastTest(test_forecast_line.BaseForecastLineTest):
+class PublicHolidaysForecastTest(test_forecast_line.BaseForecastRoleTest):
     @classmethod
     @freeze_time("2022-01-01")
     def setUpClass(cls):
@@ -22,7 +22,7 @@ class PublicHolidaysForecastTest(test_forecast_line.BaseForecastLineTest):
 
     @freeze_time("2022-04-01")
     def test_forecast_with_public_holidays(self):
-        self.env["hr.holidays.public"].create(
+        self.env["calendar.public.holiday"].create(
             {
                 "year": 2022,
                 "line_ids": [
