@@ -104,7 +104,10 @@ class ProjectTask(models.Model):
     def _run_queued_forecast_lines_update(self, precommit_key, method_name):
         ids = self.env.cr.precommit.data.pop(precommit_key, None)
         if ids:
-            getattr(self.browse(ids).exists(), method_name)()
+            # sudo(): `self` is whichever recordset first queued this key, so
+            # its env's user/company may not have access to tasks queued
+            # later by another user/company in the same transaction.
+            getattr(self.sudo().browse(ids).exists(), method_name)()
 
     @api.onchange("user_ids")
     def onchange_user_ids(self):
